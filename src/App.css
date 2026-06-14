@@ -1,0 +1,3215 @@
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  color: white;
+  font-family: system-ui, sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+.titleScreen,
+.routeMapScreen {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-content: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.titleScreen button,
+.routeMapScreen button {
+  font-size: 20px;
+  padding: 12px 24px;
+}
+
+.novelScreen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.bottomButtons {
+  position: absolute;
+  right: 16px;
+  bottom: 180px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.loopButton {
+  position: absolute;
+  right: 32px;
+  bottom: 330px;
+  z-index: 10;
+  font-size: 18px;
+  padding: 10px 18px;
+}
+
+.pen-full {
+  opacity: 1;
+}
+
+.pen-mid {
+  opacity: 0.8;
+}
+
+.pen-low {
+  opacity: 0.55;
+}
+
+.pen-empty {
+  opacity: 0.25;
+}
+
+.characterArea {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.character {
+  position: absolute;
+  bottom: 230px;
+  font-size: 40px;
+  font-weight: bold;
+  text-shadow:
+    2px 2px 0 #000,
+    -2px 2px 0 #000,
+    2px -2px 0 #000,
+    -2px -2px 0 #000;
+}
+
+.character.left {
+  left: 15%;
+}
+
+.character.center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.character.right {
+  right: 15%;
+}
+
+.textBox {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 32px;
+  min-height: 150px;
+  padding: 24px;
+  border: 4px solid white;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.78);
+  box-shadow: 0 0 0 4px black;
+  z-index: 30;
+}
+
+.speakerName {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 6px 16px;
+  border: 3px solid white;
+  background: black;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.choices {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.choices button {
+  text-align: left;
+  font-size: 20px;
+  padding: 12px 16px;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: grid;
+  place-items: center;
+  z-index: 100;
+}
+
+.memoModal,
+.confirmModal {
+  width: min(680px, 90vw);
+  max-height: 80vh;
+  overflow: auto;
+  padding: 28px;
+  border: 4px solid white;
+  background: #111;
+  box-shadow: 0 0 0 4px black;
+}
+
+.memoCloseButton {
+  position: fixed !important;
+  top: 24px !important;
+  right: 24px !important;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+}
+
+.memoModal li {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.badOverlay {
+  position: fixed;
+  right: 24px;
+  bottom: 230px;
+  display: flex;
+  gap: 12px;
+  z-index: 50;
+}
+
+.loopDistort {
+  animation: distort 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes distort {
+  from {
+    transform: rotate(-0.5deg) scale(1);
+    filter: blur(0px);
+  }
+  to {
+    transform: rotate(0.5deg) scale(1.02);
+    filter: blur(1px);
+  }
+}
+
+.selectedChoice {
+  outline: 3px solid white;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.novelScreen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 背景設定 */
+.bg-title { background-image: url("/backgrounds/title.webp"); }
+.bg-black { background-image: url("/backgrounds/black.webp"); }
+.bg-bedroom { background-image: url("/backgrounds/bedroom.webp"); }
+.bg-bedroom_end { background-image: url("/backgrounds/bedroom_end.webp"); }
+.bg-living { background-image: url("/backgrounds/living.webp"); }
+.bg-living2 { background-image: url("/backgrounds/living2.webp"); }
+.bg-living3 { background-image: url("/backgrounds/living3.webp"); }
+.bg-living4 { background-image: url("/backgrounds/living4.webp"); }
+.bg-living5 { background-image: url("/backgrounds/living5.webp"); }
+.bg-living6 { background-image: url("/backgrounds/living6.webp"); }
+.bg-living7 { background-image: url("/backgrounds/living7.webp"); }
+.bg-living8 { background-image: url("/backgrounds/living8.webp"); }
+.bg-living9 { background-image: url("/backgrounds/living9.webp"); }
+.bg-living10 { background-image: url("/backgrounds/living10.webp"); }
+.bg-living_iphone1 { background-image: url("/backgrounds/living_iphone1.webp"); }
+.bg-room_flashback { background-image: url("/backgrounds/room_flashback.webp"); }
+.bg-hospital_exterior { background-image: url("/backgrounds/hospital_exterior.webp"); }
+.bg-hospital_exterior2 { background-image: url("/backgrounds/hospital_exterior2.webp"); }
+.bg-hospital_exterior3 { background-image: url("/backgrounds/hospital_exterior3.webp"); }
+.bg-nurse_station { background-image: url("/backgrounds/nurse_station.webp"); }
+.bg-operating_room { background-image: url("/backgrounds/operating_room.webp"); }
+.bg-operating_room1 { background-image: url("/backgrounds/operating_room1.webp"); }
+.bg-icu { background-image: url("/backgrounds/icu.webp"); }
+.bg-street { background-image: url("/backgrounds/street.webp"); }
+.bg-night_street { background-image: url("/backgrounds/night_street.webp"); }
+.bg-night_street2 { background-image: url("/backgrounds/night_street2.webp"); }
+.bg-night_street3 { background-image: url("/backgrounds/night_street3.webp"); }
+.bg-sidewalk { background-image: url("/backgrounds/sidewalk.webp"); }
+.bg-bus { background-image: url("/backgrounds/bus.webp"); }
+.bg-bus2 { background-image: url("/backgrounds/bus2.webp"); }
+.bg-bus3 { background-image: url("/backgrounds/bus3.webp"); }
+.bg-station { background-image: url("/backgrounds/station.webp"); }
+.bg-restaurant { background-image: url("/backgrounds/restaurant.webp"); }
+.bg-ward_room { background-image: url("/backgrounds/ward_room.webp"); }
+.bg-hallway { background-image: url("/backgrounds/hallway.webp"); }
+.bg-exam_room { background-image: url("/backgrounds/exam_room.webp"); }
+.bg-exam_room1 { background-image: url("/backgrounds/exam_room1.webp"); }
+.bg-exam_room2 { background-image: url("/backgrounds/exam_room2.webp"); }
+.bg-exam_room3 { background-image: url("/backgrounds/exam_room3.webp"); }
+.bg-spirit_world { background-image: url("/backgrounds/spirit_world.webp"); }
+.bg-cup { background-image: url("/backgrounds/cup.webp"); }
+.bg-cup_broken { background-image: url("/backgrounds/cup_broken.webp"); }
+.bg-living_pen { background-image: url("/backgrounds/living_pen.webp"); }
+.bg-living_pen_arm { background-image: url("/backgrounds/living_pen_arm.webp"); }
+.bg-icu_arm { background-image: url("/backgrounds/icu_arm.webp"); }
+.bg-floor_pen { background-image: url("/backgrounds/floor_pen.webp"); }
+.bg-floor_pen_arm { background-image: url("/backgrounds/floor_pen_arm.webp"); }
+.bg-no { background-image: url("/backgrounds/no.webp"); }
+.bg-back { background-image: url("/backgrounds/back.webp"); }
+.bg-to_be_back{ background-image: url("/backgrounds/to_be_back.webp"); }
+.bg-icu_black{ background-image: url("/backgrounds/icu_black.webp"); }
+.bg-bedroom_arm{ background-image: url("/backgrounds/bedroom_arm.webp"); }
+.bg-white{ background-image: url("/backgrounds/white.webp"); }
+.bg-cup_hand{ background-image: url("/backgrounds/cup_hand.webp"); }
+.bg-minato_smile1{ background-image: url("/backgrounds/minato_smile1.webp"); }
+.bg-minato_smile2{ background-image: url("/backgrounds/minato_smile2.webp"); }
+.bg-phone{ background-image: url("/backgrounds/phone.webp"); }
+.bg-horse_racing{ background-image: url("/backgrounds/horse_racing.webp"); }
+.bg-street2{ background-image: url("/backgrounds/street2.webp"); }
+.bg-street2_1{ background-image: url("/backgrounds/street2_1.webp"); }
+.bg-street2_2{ background-image: url("/backgrounds/street2_2.webp"); }
+.bg-street3{ background-image: url("/backgrounds/street3.webp"); }
+.bg-street4{ background-image: url("/backgrounds/street4.webp"); }
+.bg-Bicycle{ background-image: url("/backgrounds/Bicycle.webp"); }
+.bg-night_city { background-image: url("/backgrounds/night_city.webp"); }
+.bg-ER { background-image: url("/backgrounds/ER.webp"); }
+.bg-rain_city1 { background-image: url("/backgrounds/rain_city1.webp"); }
+.bg-rain_city2 { background-image: url("/backgrounds/rain_city2.webp"); }
+.bg-rain_city3 { background-image: url("/backgrounds/rain_city3.webp"); }
+.bg-rain_city4 { background-image: url("/backgrounds/rain_city4.webp"); }
+.bg-rain_city5 { background-image: url("/backgrounds/rain_city5.webp"); }
+.bg-rain_city6 { background-image: url("/backgrounds/rain_city6.webp"); }
+.bg-rain_city6_1 { background-image: url("/backgrounds/rain_city6_1.webp"); }
+.bg-rain_city6_2 { background-image: url("/backgrounds/rain_city6_2.webp"); }
+.bg-park { background-image: url("/backgrounds/park.webp"); }
+.bg-park2 { background-image: url("/backgrounds/park2.webp"); }
+.bg-run1 { background-image: url("/backgrounds/run1.webp"); }
+.bg-loop_zero { background-image: url("/backgrounds/loop_zero.webp"); }
+.bg-brack_pen { background-image: url("/backgrounds/brack_pen.webp"); }
+.bg-after_noon { background-image: url("/backgrounds/after_noon.webp"); }
+.bg-minigame1 { background-image: url("/backgrounds/minigame1.webp"); }
+.bg-minigame2 { background-image: url("/backgrounds/minigame2.webp"); }
+.bg-minigame3 { background-image: url("/backgrounds/minigame3.webp"); }
+.bg-minigame4{ background-image: url("/backgrounds/minigame4.webp"); }
+.bg-minigame5{ background-image: url("/backgrounds/minigame5.webp"); }
+.bg-minigame6{ background-image: url("/backgrounds/minigame6.webp"); }
+.bg-ending1{ background-image: url("/backgrounds/ending1.webp"); }
+.bg-ending2{ background-image: url("/backgrounds/ending2.webp"); }
+.bg-ending3{ background-image: url("/backgrounds/ending3.webp"); }
+.bg-ending4{ background-image: url("/backgrounds/ending4.webp"); }
+.bg-ending5{ background-image: url("/backgrounds/ending5.webp"); }
+.bg-ending6{ background-image: url("/backgrounds/ending6.webp"); }
+.bg-ending7{ background-image: url("/backgrounds/ending7.webp"); }
+.bg-badend2{ background-image: url("/backgrounds/badend2.webp"); }
+.bg-badend3{ background-image: url("/backgrounds/badend3.webp"); }
+.bg-badend4{ background-image: url("/backgrounds/badend4.webp"); }
+
+
+.bg-badend2,
+.bg-badend3,
+.bg-badend4,
+.bg-loop_zero,
+.bg-brack_pen,
+.bg-title,
+.bg-bedroom,
+.bg-bedroom_end,
+.bg-living,
+.bg-living2,
+.bg-living3,
+.bg-living4,
+.bg-living5,
+.bg-living6,
+.bg-living7,
+.bg-living8,
+.bg-living9,
+.bg-living10,
+.bg-living_iphone1,
+.bg-cup,
+.bg-cup_broken,
+.bg-living_pen,
+.bg-living_pen_arm,
+.bg-icu_black,
+.bg-no,
+.bg-back,
+.bg-to_be_back,
+.bg-night_street,
+.bg-night_street2,
+.bg-night_street3,
+.bg-bedroom_arm,
+.bg-white,
+.bg-cup_hand,
+.bg-minato_smile1,
+.bg-minato_smile2,
+.bg-horse_racing,
+.bg-phone,
+.bg-room_flashback,
+.bg-hospital_exterior,
+.bg-hospital_exterior2,
+.bg-hospital_exterior3,
+.bg-nurse_station,
+.bg-operating_room,
+.bg-operating_room1,
+.bg-icu,
+.bg-icu_arm,
+.bg-floor_pen,
+.bg-floor_pen_arm,
+.bg-street,
+.bg-street2,
+.bg-street2_1,
+.bg-street2_2,
+.bg-street3,
+.bg-street4,
+.bg-night_street,
+.bg-night_city,
+.bg-rain_city1,
+.bg-rain_city2,
+.bg-rain_city3,
+.bg-rain_city4,
+.bg-rain_city5,
+.bg-rain_city6,
+.bg-rain_city6_1,
+.bg-rain_city6_2,
+.bg-park,
+.bg-park2,
+.bg-Bicycle,
+.bg-sidewalk,
+.bg-bus,
+.bg-bus2,
+.bg-bus3,
+.bg-station,
+.bg-restaurant,
+.bg-ward_room,
+.bg-hallway,
+.bg-exam_room,
+.bg-exam_room1,
+.bg-exam_room2,
+.bg-exam_room3,
+.bg-ER,
+.bg-run1,
+.bg-after_noon,
+.bg-minigame1,
+.bg-minigame2,
+.bg-minigame3,
+.bg-minigame4,
+.bg-minigame5,
+.bg-minigame6,
+.bg-ending1,
+.bg-ending2,
+.bg-ending3,
+.bg-ending4,
+.bg-ending5,
+.bg-ending6,
+.bg-ending7,
+.bg-spirit_world {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-day-1,
+.bg-day-2,
+.bg-day-3 {
+  background:
+    linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.35)),
+    #171b22;
+}
+
+/* テキスト欄 */
+.textBox {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: 34px;
+  min-height: 260px;
+  max-height: 260px;
+  padding: 38px 64px 26px 64px;
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 22px;
+  background: rgba(0, 0, 0, 0.62);
+  box-shadow: none;
+  z-index: 30;
+  box-sizing: border-box;
+}
+
+/* 名前欄：左上、角丸、横幅広め */
+.speakerName {
+  position: absolute;
+  top: -28px;
+  left: 32px;
+  min-width: 128px;
+  padding: 8px 22px;
+  border: 3px solid white;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.92);
+  color: white;
+  font-weight: bold;
+  font-size: 22px;
+  text-align: center;
+  z-index: 35;
+}
+
+/* 本文：3行想定、開始位置を右へ */
+.text {
+  font-size: 31px;
+
+  text-align: left;
+  white-space: pre-wrap;
+
+  margin-left: 8px;
+
+  padding-right: 18px;
+
+  /* 下ボタン分 */
+  padding-bottom: 58px;
+
+  line-height: 1.9;
+
+  color: white;
+
+  /* 縁取りを消す */
+  -webkit-text-stroke: 0 transparent;
+
+  /* 薄い影だけ */
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.92);
+
+  font-weight: 500;
+
+  letter-spacing: 0.02em;
+}
+
+/* テキスト欄内ボタン */
+.textBoxControls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.loopButtonInText {
+  position: absolute;
+  top: -75px;
+  right: 10px;
+
+  z-index: 5000 !important;
+  pointer-events: auto !important;
+
+  min-width: 170px;
+  height: 52px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow-wrap: normal;
+
+  font-size: 22px;
+  font-weight: bold;
+  padding: 10px 50px;
+
+  border: 3px solid #ffffff;
+  border-radius: 16px;
+
+  background: rgb(115, 157, 240) !important;
+  color: rgb(2, 0, 0) !important;
+
+  opacity: 1 !important;
+  filter: none !important;
+
+  box-shadow: 0 0 0 3px black;
+}
+
+.textBoxBottomControls {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+  z-index: 45;
+}
+
+.textBoxBottomControls button {
+  font-size: 15px;
+  padding: 6px 12px;
+}
+
+/* 旧ボタンを無効化 */
+.bottomButtons,
+.loopButton {
+  display: none;
+}
+
+/* 選択肢：画面中央 */
+.choiceLayer {
+  position: fixed;
+  left: 50%;
+  top: 18%;
+  transform: translateX(-50%);
+
+  width: min(1320px, 88vw);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+
+  z-index: 120;
+  pointer-events: none;
+}
+
+.choiceQuestionText {
+  box-sizing: border-box;
+
+  display: inline-block;
+
+  width: auto;
+  max-width: min(1320px, 88vw);
+
+  padding: 16px 44px;
+
+  text-align: center;
+
+  font-size: clamp(28px, 3vw, 48px);
+  font-weight: 900;
+  line-height: 1.22;
+
+  color: #000;
+  background: rgba(255, 255, 255, 0.88);
+
+  border: 3px solid rgba(0, 0, 0, 0.92);
+  border-radius: 22px;
+
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+
+  pointer-events: none;
+}
+
+.centerChoices {
+  width: min(760px, 72vw);
+
+  display: grid;
+  gap: 16px;
+
+  justify-items: center;
+
+  pointer-events: auto;
+}
+
+.centerChoices button {
+  width: 420px;
+  max-width: 80vw;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  padding: 16px 28px;
+
+  border-radius: 14px;
+  border: 3px solid white;
+
+  background: rgba(0, 0, 0, 0.82);
+  color: white;
+
+  text-align: center;
+}
+
+/* 右上メニュー */
+.topButtons {
+  position: absolute;
+  top: 18px;
+  right: 100px;
+  display: flex;
+  gap: 8px;
+  z-index: 60;
+}
+
+.topButtons button {
+  font-size: 15px;
+  padding: 6px 12px;
+}
+
+/* キャラ名だけ中央に浮いて見える問題の抑制 */
+.character {
+  bottom: 260px;
+  z-index: 10;
+}
+
+
+/* =========================
+   OPERATION MINI GAME
+   16:9 fixed stage
+========================= */
+
+.miniGameOverlay.operationMiniGame {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  overflow: hidden;
+  background: #000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.operationGameScaler {
+  position: relative;
+
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
+
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+
+  container-type: size;
+
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.28)),
+    url("/backgrounds/operating_room1.webp");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.operationTopPanel {
+  position: absolute;
+  top: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 86%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1cqh;
+
+  z-index: 70;
+  pointer-events: none;
+}
+
+.miniGameTimer {
+  padding: 0.8cqh 1.8cqw;
+  font-size: 2.6cqh;
+  font-weight: 900;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.72);
+  border: 0.28cqh solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+}
+
+.miniGamePrompt {
+  width: 100%;
+  min-height: 8.5cqh;
+
+  padding: 1.2cqh 3cqw;
+
+  border-radius: 2cqh;
+  border: 0.35cqh solid #222;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  color: #000;
+  font-size: 4.2cqh;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.15;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  box-sizing: border-box;
+}
+
+.miniGameMistake {
+  font-size: 2.3cqh;
+  font-weight: 900;
+  color: #fff;
+  background: rgba(120, 0, 0, 0.72);
+  border: 0.28cqh solid rgba(255,255,255,0.9);
+  border-radius: 999px;
+  padding: 0.6cqh 1.6cqw;
+}
+
+.instrumentTray {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  transform: translate(-50%, -50%);
+
+  width: 42%;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2cqw;
+
+  z-index: 40;
+}
+
+.instrumentIcon {
+  min-height: 7.2cqh;
+  font-size: 2.1cqh;
+  font-weight: 900;
+
+  color: #fff;
+  background: rgba(0, 0, 0, 0.78);
+
+  border: 0.28cqh solid rgba(255, 255, 255, 0.92);
+  border-radius: 1.4cqh;
+
+  cursor: grab;
+}
+
+.instrumentIconSelected {
+  outline: 0.35cqh solid #ffe66d;
+  background: rgba(60, 60, 0, 0.88);
+}
+
+.operationHandDrop {
+  position: absolute;
+  bottom: -8%;
+
+  width: 31%;
+  height: 82%;
+
+  z-index: 25;
+}
+
+.operationHandDrop.left {
+  left: 7%;
+}
+
+.operationHandDrop.left .handHeldLabel {
+  left: -10%;
+}
+
+.operationHandDrop.right {
+  right: 7%;
+}
+
+.operationHandDrop.right .handHeldLabel {
+  right: -10%;
+}
+
+.operationHandDrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+
+  filter: drop-shadow(0 0 1cqh rgba(90, 190, 255, 0.55));
+  pointer-events: none;
+}
+
+.operationHandDrop.left::before {
+  background-image: url("/ui/hand_left.webp");
+}
+
+.operationHandDrop.right::before {
+  background-image: url("/ui/hand_right.webp");
+}
+
+.handHeldLabel {
+  position: absolute;
+
+  top: 18%;
+
+  min-width: 10cqw;
+  padding: 0.8cqh 1.3cqw;
+
+  font-size: 2.1cqh;
+  font-weight: 900;
+  text-align: center;
+
+  color: #fff;
+  background: rgba(0, 0, 0, 0.78);
+
+  border: 0.28cqh solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+
+  z-index: 35;
+  pointer-events: none;
+}
+
+.operationTextBox {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: 3%;
+
+  min-height: 22%;
+  max-height: 22%;
+
+  padding: 3.5cqh 4cqw 2cqh 4cqw;
+
+  border: 0.12cqh solid rgba(255,255,255,0.22);
+  border-radius: 2cqh;
+
+  background: rgba(0, 0, 0, 0.68);
+
+  z-index: 90;
+  box-sizing: border-box;
+}
+
+.operationTextBox .speakerName {
+  position: absolute;
+  top: -2.6cqh;
+  left: 2cqw;
+
+  min-width: 8cqw;
+  padding: 0.6cqh 1.4cqw;
+
+  border: 0.28cqh solid white;
+  border-radius: 1.1cqh;
+
+  background: rgba(0, 0, 0, 0.92);
+  color: white;
+
+  font-weight: bold;
+  font-size: 2.1cqh;
+  text-align: center;
+
+  z-index: 95;
+}
+
+.operationTextBox .text {
+  font-size: 2.7cqh;
+  line-height: 1.7;
+  margin-left: 0;
+  padding-bottom: 0;
+}
+
+.miniGameFinalResult {
+  position: absolute;
+  right: 9%;
+  bottom: 5%;
+  z-index: 130;
+}
+
+.miniGameReturnButton {
+  font-size: 2cqh;
+  font-weight: 900;
+
+  padding: 1cqh 1.4cqw;
+
+  color: #000;
+  background: rgba(255, 255, 255, 0.94);
+
+  border: 0.28cqh solid #fff;
+  border-radius: 1.1cqh;
+
+  box-shadow: 0 0 0 0.25cqh black;
+}
+
+/* ===== Novel UI final tuning ===== */
+
+/* キャラ絵：下端を画面下端へ */
+.characterImage {
+  position: absolute;
+  bottom: 0;
+  max-height: 94vh;
+  width: auto;
+  z-index: 10;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.characterImage.center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.characterImage.left {
+  left: 12%;
+}
+
+.characterImage.right {
+  right: 12%;
+}
+
+/* テキスト欄：少し薄め */
+.textBox {
+  background: rgba(0, 0, 0, 0.68);
+}
+
+/* ループボタン：テキストボックスより上、角丸、縁取り、色変更 */
+.loopButtonInText {
+  position: absolute;
+  top: -75px;
+  right: 10px;
+  pointer-events: auto;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 10px 50px;
+  border: 3px solid #ffffff;
+  border-radius: 16px;
+  background: rgba(115, 157, 240, 0.863);
+  color: rgb(2, 0, 0);
+  box-shadow: 0 0 0 3px black;
+  z-index: 80;
+}
+
+.loopButtonInText:hover {
+  background: rgba(140, 227, 253, 0.692);
+}
+
+/* ===== ARM MEMO FINAL ===== */
+
+.armButton,
+.armButtonInText {
+  position: absolute;
+  left: 7%;
+  bottom: auto;
+  top: 8px;
+  z-index: 2200;
+
+  height: 52px;
+  min-width: 160px;
+  padding: 0 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 19px;
+  font-weight: bold;
+
+  border: 3px solid #ffffff;
+  border-radius: 14px;
+
+  background: rgba(246, 196, 105, 0.94);
+  color: #111;
+
+  box-shadow: 0 0 0 3px black;
+}
+
+.armButton:disabled,
+.memoButton:disabled {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
+.armButton:hover,
+.armButtonInText:hover {
+  background: rgb(250, 209, 75);
+}
+
+.armMemoOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50000;
+  background: rgba(0, 0, 0, 0.68);
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+/* ===== ARM MEMO FINAL ===== */
+.armButton,
+.armButtonInText {
+  position: absolute;
+  left: 7%;
+  bottom: auto;
+  top: 8px;
+  z-index: 2200;
+
+  height: 52px;
+  min-width: 160px;
+  padding: 0 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 19px;
+  font-weight: bold;
+
+  border: 3px solid #ffffff;
+  border-radius: 14px;
+
+  background: rgba(246, 196, 105, 0.94);
+  color: #111;
+
+  box-shadow: 0 0 0 3px black;
+}
+
+.armButton:hover,
+.armButtonInText:hover {
+  background: rgb(250, 209, 75);
+}
+
+.armMemoOverlay.closing {
+  animation: armOverlayFadeOut 0.32s ease-in both;
+}
+
+.armMemoPanel {
+  position: absolute;
+  left: 0;
+  bottom: 18%;
+  width: min(58%, 920px);
+  z-index: 50010;
+  pointer-events: none;
+  animation: armSlideUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.armMemoPanel.closing {
+  animation: armSlideDown 0.32s ease-in both;
+}
+
+@keyframes armSlideUp {
+  from {
+    transform: translateY(calc(42% + 700px));
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(42%);
+    opacity: 1;
+  }
+}
+
+@keyframes armSlideDown {
+  from {
+    transform: translateY(42%);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(calc(42% + 500px));
+    opacity: 0;
+  }
+}
+
+@keyframes armOverlayFadeOut {
+  from {
+    background: rgba(0, 0, 0, 0.68);
+  }
+
+  to {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+
+.armCanvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.armLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.armMemoClose {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.armMemoCloseGlobal {
+  position: fixed !important;
+
+  left: min(760px, calc(82vw - 130px)) !important;
+  bottom: 500px !important;
+
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  background: rgba(0, 0, 0, 0.82);
+  color: #fff;
+
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1;
+
+  box-shadow: 0 0 0 3px #000;
+}
+
+.armMemoCloseFloating {
+  position: fixed !important;
+  left: calc(min(920px, 82vw) - 72px) !important;
+  bottom: calc(200px + (min(920px, 82vw) * 9 / 16) - 72px) !important;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  background: rgba(0, 0, 0, 0.82);
+  color: #fff;
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1;
+  box-shadow: 0 0 0 3px #000;
+}
+
+body.armMemoOpen .textBox {
+  z-index: 100;
+}
+
+body.armMemoOpen .text,
+body.armMemoOpen .speakerName,
+body.armMemoOpen .textBoxBottomControls {
+  pointer-events: none;
+}
+
+body.armMemoOpen .loopButtonInText {
+  z-index: 2400 !important;
+  pointer-events: auto !important;
+  background: rgb(115, 157, 240) !important;
+  opacity: 1 !important;
+  filter: none !important;
+  color: rgb(2, 0, 0) !important;
+}
+
+body.armMemoOpen .armButton,
+body.armMemoOpen .armButtonInText {
+  z-index: 2400 !important;
+  pointer-events: auto !important;
+}
+
+.armInkLayer {
+  opacity: 1;
+  transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
+.armInkLayer.inkFaded {
+  opacity: 0.58;
+  filter: contrast(0.9);
+}
+
+.armInkLayer.inkVeryFaded {
+  opacity: 0.32;
+  filter: contrast(0.75);
+}
+
+.langButton {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 50;
+
+  min-width: 90px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #fff;
+  border-radius: 10px;
+
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  padding: 0;
+}
+
+.effectOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.effectOverlay.dark {
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.effectOverlay.black {
+  background: #000;
+}
+
+.effectOverlay.white {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.effectOverlay.red {
+  background: rgba(80, 0, 0, 0.75);
+}
+
+.effectText {
+  color: #fff;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 32px;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+}
+
+.glitchText {
+  animation: screenGlitchShakeOnce 0.28s ease-in-out 1;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.92);
+}
+
+@keyframes screenGlitchFlicker {
+  0% { opacity: 1; }
+  30% { opacity: 0.92; }
+  60% { opacity: 1; }
+  80% { opacity: 0.86; }
+  100% { opacity: 1; }
+}
+
+@keyframes glitchLayerA {
+  0% { opacity: 0; transform: translateX(0); }
+  35% { opacity: 1; transform: translateX(5px); }
+  70% { opacity: 0.35; transform: translateX(-2px); }
+  100% { opacity: 0; transform: translateX(0); }
+}
+
+@keyframes glitchLayerB {
+  0% { opacity: 0; transform: translateX(0); }
+  40% { opacity: 0.8; transform: translateX(-5px); }
+  75% { opacity: 0.3; transform: translateX(2px); }
+  100% { opacity: 0; transform: translateX(0); }
+}
+
+@keyframes glitchShake {
+  0% { transform: translate(0, 0); opacity: 1; }
+  25% { transform: translate(2px, -1px); opacity: 0.9; }
+  50% { transform: translate(-2px, 1px); opacity: 1; }
+  75% { transform: translate(1px, 2px); opacity: 0.85; }
+  100% { transform: translate(0, 0); opacity: 1; }
+}
+
+.screenGlitch {
+  animation: screenGlitchShakeOnce 0.28s ease-in-out 1;
+}
+
+@keyframes screenGlitchShakeOnce {
+  0% { transform: translate(0, 0); }
+  18% { transform: translate(4px, -2px); }
+  36% { transform: translate(-4px, 2px); }
+  54% { transform: translate(3px, 1px); }
+  72% { transform: translate(-2px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.textBoxOverlay-dark {
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.textBoxOverlay-black {
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.textBoxOverlay-white {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.textBoxOverlay-red {
+  background: rgba(80, 0, 0, 0.78);
+}
+
+.screenFade {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: black;
+  transform-origin: center center;
+}
+
+.tint-red {
+  background: rgba(255, 0, 0, 0.28);
+  animation: redTintFlash 3s ease forwards;
+}
+
+@keyframes redTintFlash {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.screenTint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 35;
+}
+
+.screenFade.fade-in {
+  opacity: 1;
+  background: #000;
+  animation: screenFadeIn 1s ease both;
+}
+
+.fade-out {
+  animation: screenFadeOut 1s ease forwards;
+}
+
+.fade-whiteOut {
+  background: white;
+  animation: screenFadeOut 1.5s ease forwards;
+}
+
+.fade-inOut {
+  animation: screenFadeInOut 1.5s ease forwards;
+}
+
+@keyframes screenFadeIn {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes screenFadeOut {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes screenFadeInOut {
+  0% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.textCenter {
+  text-align: center;
+  margin-left: 0;
+}
+
+.outsideBottomControls {
+  position: absolute;
+  right: 9%;
+  bottom: 46px;
+  display: flex;
+  gap: 8px;
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+.outsideBottomControls button {
+  pointer-events: auto;
+  font-size: 15px;
+  padding: 6px 12px;
+}
+
+.textBoxControls {
+  pointer-events: auto !important;
+  z-index: 9998 !important;
+}
+
+.textBoxBottomControls {
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+}
+
+.textBoxBottomControls button {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10000 !important;
+}
+
+.miniGameStartOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 280;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.miniGameStartModal {
+  width: min(520px, 90vw);
+
+  padding: 40px;
+
+  border-radius: 24px;
+
+  background: rgba(0, 0, 0, 0.92);
+
+  border: 3px solid rgba(255,255,255,0.9);
+
+  text-align: center;
+}
+
+.miniGameStartTitle {
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 900;
+  color: white;
+
+  margin-bottom: 28px;
+}
+
+.miniGameStartButton {
+  min-width: 240px;
+  height: 74px;
+
+  font-size: 32px;
+  font-weight: 900;
+
+  border-radius: 18px;
+
+  background: white;
+  color: black;
+
+  cursor: pointer;
+}
+
+.screenTintRed {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+
+  background: rgba(120, 0, 0, 0.38);
+
+  pointer-events: none;
+  animation: bleedingTintPulse 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes bleedingTintPulse {
+  from {
+    background: rgba(120, 0, 0, 0.28);
+  }
+
+  to {
+    background: rgba(180, 0, 0, 0.48);
+  }
+}
+
+.miniGameStartInText {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5000;
+  pointer-events: auto;
+}
+
+.miniGameStartInText button {
+  min-width: 280px;
+  height: 82px;
+  padding: 12px 36px;
+
+  font-size: 30px;
+  font-weight: 900;
+
+  color: #000;
+  background: rgba(255, 255, 255, 0.96);
+
+  border: 4px solid #fff;
+  border-radius: 18px;
+
+  box-shadow: 0 0 0 4px #000;
+}
+
+.armMemoOverlay.storyProgressAllowed {
+  pointer-events: none;
+}
+
+.armMemoOverlay.storyProgressAllowed .armMemoPanel {
+  pointer-events: none;
+}
+
+.armMemoOverlay.storyProgressAllowed .armMemoClose {
+  display: none;
+}
+
+.noiseTextImage {
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+
+  background-image: url("/effects/iya.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  animation:
+    horrorTextShake 0.09s infinite,
+    horrorTextFlicker 0.8s infinite;
+  filter: contrast(1.25) brightness(1.15);
+}
+
+@keyframes horrorTextShake {
+  0% { transform: translate(0, 0) skew(0deg); }
+  20% { transform: translate(-3px, 2px) skew(-1deg); }
+  40% { transform: translate(4px, -1px) skew(1deg); }
+  60% { transform: translate(-2px, -3px) skew(0deg); }
+  80% { transform: translate(2px, 3px) skew(-0.6deg); }
+  100% { transform: translate(0, 0) skew(0deg); }
+}
+
+@keyframes horrorTextFlicker {
+  0% { opacity: 0.95; filter: contrast(1.2); }
+  10% { opacity: 0.6; filter: contrast(2) blur(0.4px); }
+  20% { opacity: 1; filter: contrast(1.5); }
+  55% { opacity: 0.75; filter: contrast(2.2) blur(0.8px); }
+  100% { opacity: 0.95; filter: contrast(1.2); }
+}
+
+.backgroundCrossfadeLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  animation-name: backgroundCrossfadeOut;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+}
+
+@keyframes backgroundCrossfadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.visualCrossfadeLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+
+  animation-name: visualCrossfadeOut;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+}
+
+.visualCrossfadeBackground {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.visualCrossfadeCharacter {
+  z-index: 20;
+}
+
+@keyframes visualCrossfadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+body.armMemoOpen .choiceLayer {
+  z-index: 2400;
+  pointer-events: none;
+}
+
+body.armMemoOpen .centerChoices {
+  pointer-events: auto;
+}
+
+body.armMemoOpen .choiceQuestionText {
+  z-index: 2401;
+}
+
+body.armMemoOpen .centerChoices button {
+  position: relative;
+  z-index: 2402;
+}
+
+.loopVortex {
+  position: absolute;
+  inset: 0;
+  z-index: 800;
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.18) 0px,
+      rgba(255,255,255,0.18) 1px,
+      rgba(0,0,0,0.28) 2px,
+      rgba(0,0,0,0.28) 5px
+    ),
+    radial-gradient(
+      circle at center,
+      rgba(255,255,255,0.12) 0%,
+      rgba(0,0,0,0.15) 35%,
+      rgba(0,0,0,0.75) 100%
+    );
+
+  mix-blend-mode: normal;
+  animation:
+    loopSignalFlash 90ms steps(2) infinite;
+}
+
+@keyframes loopSignalFlash {
+  0% {
+    opacity: 0.05;
+    background-position: 0 0, center;
+  }
+
+  10% {
+    opacity: 0.95;
+    background-position: -36px 18px, center;
+  }
+
+  18% {
+    opacity: 0.18;
+    background-position: 20px -28px, center;
+  }
+
+  32% {
+    opacity: 0.75;
+    background-position: -12px 36px, center;
+  }
+
+  48% {
+    opacity: 0.08;
+    background-position: 32px -16px, center;
+  }
+
+  64% {
+    opacity: 1;
+    background-position: -42px 22px, center;
+  }
+
+  78% {
+    opacity: 0.22;
+    background-position: 18px -12px, center;
+  }
+
+  100% {
+    opacity: 0.65;
+    background-position: 0 0, center;
+  }
+}
+
+.loopVortexScreen {
+  animation: loopGrayFade 1500ms linear forwards;
+}
+
+@keyframes loopGrayFade {
+  0% {
+    filter: grayscale(0);
+  }
+
+  100% {
+    filter: grayscale(1);
+  }
+}
+
+@keyframes loopGrayFade {
+  0% {
+    filter: grayscale(0);
+  }
+
+  100% {
+    filter: grayscale(1);
+  }
+}
+
+@keyframes tvNoiseFlicker {
+  0% {
+    background-position: 0 0, center, center;
+  }
+
+  100% {
+    background-position: 12px -18px, center, center;
+  }
+}
+
+.fade-tvOff {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.35) 0px,
+      rgba(255,255,255,0.35) 2px,
+      rgba(0,0,0,0.7) 3px,
+      rgba(0,0,0,0.7) 8px
+    ),
+    radial-gradient(circle at center, rgba(255,255,255,1), rgba(0,0,0,1) 52%),
+    black;
+
+  z-index: 99999;
+  animation:
+    tvOffBlackout 500ms steps(1) forwards,
+    tvOffNoiseBurst 45ms steps(2) infinite;
+}
+
+@keyframes tvOffBlackout {
+  0% {
+    opacity: 0;
+    transform: scaleY(1) scaleX(1);
+  }
+
+  12% {
+    opacity: 1;
+    transform: scaleY(1.04) scaleX(1.02);
+  }
+
+  32% {
+    opacity: 1;
+    transform: scaleY(0.18) scaleX(1.15);
+  }
+
+  48% {
+    opacity: 1;
+    transform: scaleY(0.04) scaleX(0.85);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scaleY(0.015) scaleX(0.28);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scaleY(0.002) scaleX(0.04);
+  }
+
+  71% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1);
+    background: black;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1);
+    background: black;
+  }
+}
+
+@keyframes tvOffNoiseBurst {
+  0% {
+    background-position: 0 0, center, center;
+  }
+
+  100% {
+    background-position: 32px -28px, center, center;
+  }
+}
+
+.loopStrongGlitch {
+  animation:
+    loopHorizontalJitter 1000ms steps(1) forwards,
+    loopUneasyGray 1000ms linear forwards;
+  transform-origin: center center;
+}
+
+@keyframes loopHorizontalJitter {
+  0%   { transform: translateX(0) scale(1.04); }
+  8%   { transform: translateX(-6px) scale(1.045); }
+  12%  { transform: translateX(18px) scale(1.05); }
+  16%  { transform: translateX(-24px) scale(1.055); }
+  22%  { transform: translateX(0) scale(1.06); }
+
+  38%  { transform: translateX(4px) scale(1.07); }
+  42%  { transform: translateX(-34px) scale(1.08); }
+  46%  { transform: translateX(30px) scale(1.085); }
+  52%  { transform: translateX(0) scale(1.09); }
+
+  68%  { transform: translateX(-8px) scale(1.105); }
+  72%  { transform: translateX(42px) scale(1.11); }
+  76%  { transform: translateX(-38px) scale(1.115); }
+  82%  { transform: translateX(0) scale(1.12); }
+
+  94%  { transform: translateX(16px) scale(1.13); }
+  100% { transform: translateX(0) scale(1.14); }
+}
+
+@keyframes loopUneasyGray {
+  0% {
+    filter: grayscale(0) contrast(1.1) brightness(1);
+  }
+  40% {
+    filter: grayscale(0.7) contrast(2.2) brightness(0.9);
+  }
+  100% {
+    filter: grayscale(1) contrast(3.5) brightness(0.65);
+  }
+}
+
+.loopDecisionOverlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.22) 0px,
+      rgba(0, 0, 0, 0.22) 2px,
+      rgba(0, 0, 0, 0.46) 3px,
+      rgba(0, 0, 0, 0.46) 6px
+    ),
+    radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(0, 0, 0, 0.62) 100%
+    );
+
+  z-index: 25;
+  pointer-events: none;
+}
+
+.loopDecisionOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.24) 0px,
+      rgba(0, 0, 0, 0.24) 2px,
+      rgba(0, 0, 0, 0.48) 3px,
+      rgba(0, 0, 0, 0.48) 6px
+    ),
+    radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.68) 100%
+    );
+}
+
+.textBox {
+  z-index: 30;
+}
+
+.loopButtonInText {
+  z-index: 5000 !important;
+  pointer-events: auto !important;
+}
+
+.textBoxInvisible {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+}
+
+.textBoxInvisible .speakerName,
+.textBoxInvisible .text,
+.textBoxInvisible .textBoxBottomControls {
+  display: none !important;
+}
+
+.textBoxInvisible {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.textBoxInvisible .speakerName,
+.textBoxInvisible .text,
+.textBoxInvisible .textBoxBottomControls {
+  display: none !important;
+}
+
+.endingList {
+  display: grid;
+  gap: 12px;
+  width: min(720px, 90vw);
+}
+
+.endingCard {
+  padding: 16px 20px;
+  border: 2px solid white;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.72);
+  text-align: left;
+}
+
+.endingCard.locked {
+  opacity: 0.45;
+}
+
+.endingCard h2 {
+  margin: 0 0 8px;
+}
+
+.itemSelectLayer {
+  position: fixed;
+  left: 50%;
+  top: 16%;
+  transform: translateX(-50%);
+  width: min(900px, 86vw);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  pointer-events: auto;
+}
+
+.itemSelectCount {
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.itemSelectChoices {
+  width: min(760px, 76vw);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.itemSelectChoices button {
+  font-size: 22px;
+  font-weight: 800;
+  padding: 14px 24px;
+
+  border-radius: 14px;
+  border: 3px solid #ffffff;
+
+  background: rgba(255,255,255,0.95);
+  color: #111;
+
+  text-align: center;
+}
+
+.itemSelectSubmit {
+  font-size: 22px;
+  font-weight: 800;
+  padding: 14px 24px;
+
+  border-radius: 14px;
+  border: 3px solid #ffffff;
+
+  background: rgba(255,255,255,0.95);
+  color: #111;
+
+  text-align: center;
+}
+
+.itemSelectChoices button.selected {
+  background: rgb(115,157,240);
+  color: #000;
+}
+
+.itemSelectSubmit {
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #000;
+}
+
+.itemSelectChoices button:disabled,
+.itemSelectSubmit:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.characterFade-in {
+  animation: characterFadeIn 1200ms forwards;
+}
+
+.characterFade-out {
+  animation: characterFadeOut 1200ms forwards;
+}
+
+@keyframes characterFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes characterFadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.splashScreen {
+  width: 100%;
+  height: 100vh;
+  color: #111;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.logoSplash,
+.disclaimerSplash {
+  background: #fff;
+}
+
+.circleLogo {
+  width: min(520px, 72vw);
+  height: auto;
+  object-fit: contain;
+  animation: logoFade 1800ms ease both;
+}
+
+.disclaimerSplash {
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.disclaimerText {
+  width: min(1180px, 86vw);
+  max-width: 1180px;
+
+  font-size: clamp(14px, 1.65vw, 27px);
+  line-height: 1.65;
+
+  text-align: center;
+  font-weight: 700;
+  color: #111;
+
+  animation: disclaimerFade 4000ms ease forwards;
+}
+
+.disclaimerBlock {
+  margin-bottom: clamp(22px, 3vh, 42px);
+}
+
+.disclaimerBlock:last-child {
+  margin-bottom: 0;
+}
+
+.disclaimerText p {
+  margin: 0 0 12px;
+}
+
+.disclaimerJa p {
+  white-space: nowrap;
+}
+
+.disclaimerEn {
+  font-size: 0.82em;
+  line-height: 1.55;
+}
+
+.disclaimerText p {
+  margin: 0 0 18px;
+}
+
+.titleScreenWithBg {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+
+  background-image: url("/ui/title_bg.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.titleScreenWithBg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+.titleClickGuide {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
+  z-index: 10;
+
+  font-size: clamp(22px, 2.4vw, 36px);
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.95);
+
+  animation: titleGuideBlink 1.4s ease-in-out infinite alternate;
+}
+
+.titleMenuPanel {
+  position: absolute;
+  right: 8%;
+  bottom: 12%;
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  min-width: 280px;
+
+  animation: titleMenuFadeIn 300ms ease both;
+}
+
+.titleMenuPanel button {
+  font-size: 24px;
+  font-weight: 900;
+  padding: 14px 28px;
+
+  color: white;
+  background: rgba(0, 0, 0, 0.72);
+
+  border: 3px solid rgba(255, 255, 255, 0.92);
+  border-radius: 14px;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.9);
+}
+
+.titleMenuPanel button:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: black;
+}
+
+@keyframes logoFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  25% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes disclaimerFade {
+  0% {
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes titleGuideBlink {
+  from {
+    opacity: 0.45;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes titleMenuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#root {
+  display: grid;
+  place-items: center;
+  background: #000;
+  overflow: hidden;
+}
+
+.appFrame {
+  position: relative;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
+  overflow: hidden;
+  background: #000;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  display: grid;
+  place-items: center;
+  background: #000;
+}
+
+.appFrame {
+  position: relative;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
+  overflow: hidden;
+  background: #000;
+}
+
+.appFrame .splashScreen,
+.appFrame .titleScreenWithBg,
+.appFrame .routeMapScreen,
+.appFrame .novelScreen {
+  width: 100%;
+  height: 100%;
+}
+
+.logoSplash,
+.disclaimerSplash {
+  background: #fff;
+  color: #111;
+}
+
+.disclaimerText {
+  color: #111;
+  animation: disclaimerFade 4000ms ease forwards;
+}
+
+.settingsModal {
+  width: min(720px, 92vw);
+
+  max-height: 85vh;
+
+  overflow-y: auto;
+
+  padding: clamp(16px, 2vw, 32px);
+}
+
+.settingsModal {
+  width: min(720px, 90vw);
+}
+
+.settingsModal h2 {
+  text-align: center;
+  font-size: clamp(24px, 3vw, 36px);
+  margin-bottom: 24px;
+}
+
+.settingsRow {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-bottom: 24px;
+
+  font-size: clamp(18px, 2vw, 24px);
+
+  font-weight: bold;
+}
+
+.settingsRow input[type="range"] {
+  width: 100%;
+  height: 32px;
+}
+
+.settingsModal button {
+  display: block;
+
+  width: min(240px, 70%);
+
+  height: clamp(48px, 6vw, 64px);
+
+  margin: 24px auto 0;
+
+  font-size: clamp(18px, 2vw, 24px);
+
+  font-weight: bold;
+}
+
+/* キャラ絵だけ画面サイズに合わせて縮小 */
+.appFrame .characterImage {
+  bottom: 0;
+  max-height: min(95%, 1200px);
+  max-width: 62%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.textCenterFade {
+  animation: centerTextFadeIn 0.6s ease forwards;
+}
+
+.textCenterFadeOut {
+  animation: centerTextFadeOut 0.5s ease forwards;
+}
+
+@keyframes centerTextFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes centerTextFadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.centerLineFadeIn {
+  animation: centerLineFadeIn 700ms ease forwards;
+}
+
+.centerLineFadeOut {
+  animation: centerLineFadeOut 500ms ease forwards;
+}
+
+@keyframes centerLineFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes centerLineFadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* =========================
+   TOP / TEXT BUTTON POLISH
+   タイトル・設定・ログ・スキップ・オート
+========================= */
+
+.topButtons button,
+.textBoxBottomControls button {
+  border: 2px solid #fff;
+  border-radius: 999px;
+  font-size: 18px !important;
+  padding: 10px 18px !important;
+  min-width: 90px;
+
+  color: #fff;
+  font-weight: 900;
+
+  background: rgba(0, 0, 0, 0.72);
+
+  box-shadow:
+    0 0 0 2px #000,
+    0 4px 10px rgba(0, 0, 0, 0.55);
+
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9);
+
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.topButtons button:hover,
+.textBoxBottomControls button:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 0 0 2px #000,
+    0 6px 14px rgba(0, 0, 0, 0.7);
+}
+
+.topButtons button:active,
+.textBoxBottomControls button:active {
+  transform: translateY(1px);
+}
+
+/* スキップ */
+.textBoxBottomControls button:first-child {
+  background: rgba(60, 95, 160, 0.88);
+  color: #fff;
+}
+
+/* オート */
+.textBoxBottomControls button:last-child {
+  background: rgba(180, 120, 40, 0.9);
+  color: #111;
+  text-shadow: none;
+}
+
+.textBoxBottomControls button:first-child:hover {
+  background: rgba(85, 125, 210, 0.95);
+}
+
+.textBoxBottomControls button:last-child:hover {
+  background: rgba(240, 175, 70, 0.95);
+}
+
+/* 強制腕出し：テキスト欄の後ろ */
+.armMemoOverlay.armMemoBehindText {
+  z-index: 20;
+  background: transparent;
+  pointer-events: none;
+}
+
+.armMemoOverlay.armMemoBehindText .armMemoPanel {
+  z-index: 21;
+  left: 0;
+  bottom: 18%;
+  width: min(58%, 820px);
+  opacity: 0.95;
+}
+
+body.armMemoOpen .textBox {
+  z-index: 2300;
+}
+
+.itemSelectDarkOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.logModal {
+  width: min(760px, 78vw);
+  height: min(620px, 72vh);
+  max-height: 72vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+  position: relative;
+
+  padding-bottom: 68px;
+
+  background: rgba(20, 20, 24, 0.88);
+
+  border-radius: 18px; /* ←追加 */
+  overflow: hidden;    /* ←追加 */
+}
+
+.logModal h2 {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.logContent {
+  flex: 1;
+  overflow-y: auto;
+
+  text-align: left;
+
+  font-size: 1.25rem; /* ←大きく */
+  line-height: 1.8;
+
+  padding: 8px 12px 12px;
+}
+
+.logLine b {
+  color: #ffd966;
+  margin-right: 4px;
+  font-size: 1.28rem;
+}
+
+.logCloseButton {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: transparent;
+  color: #fff;
+  padding: 8px 22px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.logCloseButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.routeMapScreen {
+  width: 100%;
+  min-height: 100vh;
+  padding: 48px 7vw 40px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  overflow-y: auto;
+
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.88)),
+    url("/backgrounds/black.webp");
+
+  background-size: cover;
+  background-position: center;
+
+  color: white;
+  text-align: center;
+}
+
+.routeMapHeader {
+  margin-bottom: 28px;
+}
+
+.routeMapHeader h1 {
+  margin: 0 0 12px;
+  font-size: 42px;
+  letter-spacing: 0.08em;
+}
+
+.routeMapHeader p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+.routeMapGroups {
+  width: min(1120px, 92vw);
+  display: grid;
+  gap: 34px;
+}
+
+.routeMapGroup {
+  text-align: left;
+}
+
+.routeMapGroup > h2 {
+  margin: 0 0 14px;
+  font-size: 28px;
+  border-left: 6px solid rgba(255, 255, 255, 0.9);
+  padding-left: 14px;
+}
+
+.endingList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.endingCard {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.62);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.endingCard.unlocked {
+  border-color: rgba(255, 255, 255, 0.72);
+}
+
+.endingCard.locked {
+  filter: grayscale(1);
+  opacity: 0.62;
+}
+
+.endingImageWrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.endingImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.endingUnknown {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.endingCardBody {
+  padding: 16px 18px 18px;
+}
+
+.endingCardBody h3 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.endingCardBody p {
+  min-height: 3.2em;
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 0.92;
+}
+
+.endingCardBody small {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.routeMapBackButton {
+  margin-top: 34px;
+  padding: 10px 28px;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+
+  background: rgba(0, 0, 0, 0.72);
+  color: white;
+}
+
+.routeMapBackButton:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* =========================
+   ROUTE MAP FINAL
+========================= */
+
+.appFrame .routeMapScreen {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+
+  padding: 28px 48px 32px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.92)),
+    url("/backgrounds/black.webp");
+
+  background-size: cover;
+  background-position: center;
+
+  color: white;
+  text-align: left;
+}
+
+.routeMapHeader {
+  text-align: center;
+  margin-bottom: 22px;
+  flex-shrink: 0;
+}
+
+.routeMapHeader h1 {
+  margin: 0 0 8px;
+  font-size: 38px;
+  letter-spacing: 0.12em;
+}
+
+.routeMapHeader p {
+  margin: 0;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.routeMapSections {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.routeMapSection h2 {
+  margin: 0 0 14px;
+  padding-left: 14px;
+
+  font-size: 27px;
+  letter-spacing: 0.08em;
+
+  border-left: 6px solid rgba(255, 255, 255, 0.9);
+}
+
+.routeMapSection-true h2 {
+  color: #f5e6a8;
+}
+
+.routeMapSection-good h2 {
+  color: #a8d8ff;
+}
+
+.routeMapSection-bad h2 {
+  color: #ff9a9a;
+}
+
+.routeEndingList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.routeEndingCard {
+  overflow: hidden;
+
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.28);
+
+  background: rgba(0, 0, 0, 0.66);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
+}
+
+.routeEndingCard.unlocked {
+  border-color: rgba(255, 255, 255, 0.78);
+}
+
+.routeEndingCard.locked {
+  opacity: 0.52;
+  filter: grayscale(1);
+}
+
+.routeEndingImageWrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.routeEndingImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.routeEndingUnknown {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+
+  background: rgba(0, 0, 0, 0.74);
+}
+
+.routeEndingBody {
+  padding: 14px 16px 16px;
+}
+
+.routeEndingDate {
+  margin-bottom: 6px;
+
+  font-size: 13px;
+  font-weight: 800;
+  opacity: 0.72;
+}
+
+.routeEndingBody h3 {
+  margin: 0 0 8px;
+  font-size: 21px;
+}
+
+.routeEndingBody p {
+  margin: 0 0 10px;
+  min-height: 2.8em;
+
+  font-size: 14px;
+  line-height: 1.55;
+  opacity: 0.92;
+}
+
+.routeEndingBody small {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.routeMapBackButton {
+  align-self: center;
+
+  margin-top: 28px;
+  padding: 10px 28px;
+
+  flex-shrink: 0;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.72);
+  color: white;
+}
+
+.routeMapBackButton:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+@media (max-width: 900px) {
+  .routeEndingList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .appFrame .routeMapScreen {
+    padding: 22px 22px 28px;
+  }
+
+  .routeEndingList {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   ROUTE MAP FINAL FIX
+========================= */
+
+.appFrame .routeMapScreen {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  place-content: unset !important;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+
+  padding: 24px 46px 32px;
+  box-sizing: border-box;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.94)),
+    url("/backgrounds/black.webp");
+
+  background-size: cover;
+  background-position: center;
+
+  color: white;
+  text-align: left;
+}
+
+.routeMapHeader {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.routeMapHeader h1 {
+  margin: 0 0 8px;
+  font-size: 38px;
+  letter-spacing: 0.12em;
+}
+
+.routeMapHeader p {
+  margin: 0;
+  font-size: 18px;
+}
+
+.routeMapSections {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.routeMapSection h2 {
+  margin: 0 0 14px;
+  padding-left: 14px;
+  font-size: 27px;
+  letter-spacing: 0.08em;
+  border-left: 6px solid rgba(255, 255, 255, 0.9);
+}
+
+.routeMapSection-true h2 {
+  color: #f5e6a8;
+}
+
+.routeMapSection-good h2 {
+  color: #a8d8ff;
+}
+
+.routeMapSection-bad h2 {
+  color: #ff9a9a;
+}
+
+.routeEndingList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.routeEndingCard {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.66);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
+}
+
+.routeEndingCard.unlocked {
+  border-color: rgba(255, 255, 255, 0.78);
+}
+
+.routeEndingCard.locked {
+  opacity: 0.52;
+  filter: grayscale(1);
+}
+
+.routeEndingImageWrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.routeEndingImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.routeEndingUnknown {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  background: rgba(0, 0, 0, 0.74);
+}
+
+.routeEndingBody {
+  padding: 14px 16px 16px;
+}
+
+.routeEndingDate {
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  opacity: 0.72;
+}
+
+.routeEndingBody h3 {
+  margin: 0 0 8px;
+  font-size: 21px;
+}
+
+.routeEndingBody p {
+  margin: 0 0 10px;
+  min-height: 2.8em;
+  font-size: 14px;
+  line-height: 1.55;
+  opacity: 0.92;
+}
+
+.routeEndingBody small {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.routeMapBackButton {
+  align-self: center;
+  margin-top: 28px;
+  padding: 10px 28px;
+  font-size: 18px;
+  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.72);
+  color: white;
+}
+
+.routeMapBackButtonTop {
+  align-self: flex-end;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.routeMapBackButton:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+@media (max-width: 900px) {
+  .routeEndingList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .appFrame .routeMapScreen {
+    padding: 22px;
+  }
+
+  .routeEndingList {
+    grid-template-columns: 1fr;
+  }
+}
+
+.routeMapEmpty {
+  padding: 18px 22px;
+  border-radius: 14px;
+  border: 2px dashed rgba(255, 255, 255, 0.32);
+  background: rgba(0, 0, 0, 0.42);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 16px;
+}
+
+/* =========================
+   SETTINGS MODAL
+========================= */
+
+.settingsModal {
+  border-radius: 24px !important;
+
+  background: rgba(20, 20, 24, 0.88) !important;
+
+  backdrop-filter: blur(6px);
+
+  border: 3px solid rgba(255,255,255,0.9);
+
+  box-shadow:
+    0 0 0 4px rgba(0,0,0,0.9),
+    0 12px 40px rgba(0,0,0,0.5);
+
+  overflow: hidden;
+}
+
+.settingsModal h2 {
+  color: #fff !important;
+}
