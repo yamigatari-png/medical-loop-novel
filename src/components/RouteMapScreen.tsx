@@ -71,7 +71,7 @@ const DAY1_BAD_ENDINGS: RouteEnding[] = [
     title: "バッドエンド 5",
     date: "Day1 / 10月10日",
     description: "【飲酒運転×】",
-    image: "/route_endings/bad_end_05.webp",
+    image: "/route_endings/badend5.webp",
   },
 ];
 
@@ -83,28 +83,28 @@ const DAY3_BAD_ENDINGS: RouteEnding[] = [
     title: "バッドエンド 6",
     date: "Day3 / 10月12日",
     description: "【報告する】",
-    image: "/route_endings/bad_end_06.webp",
+    image: "/route_endings/badend6.webp",
   },
   {
     ids: ["day3_remove_gauze_bad_end"],
     title: "バッドエンド 7",
     date: "Day3 / 10月12日",
     description: "【摘出×】",
-    image: "/route_endings/bad_end_07.webp",
+    image: "/route_endings/badend7.webp",
   },
   {
     ids: ["day3_run_away_bad_end"],
     title: "バッドエンド 8",
     date: "Day3 / 10月12日",
     description: "【逃げちゃダメだ】",
-    image: "/route_endings/bad_end_08.webp",
+    image: "/route_endings/badend8.webp",
   },
   {
     ids: ["day3_blame_takamiya_bad_end", "day3_blame_bad_end"],
     title: "バッドエンド 9",
     date: "Day3 / 10月12日",
     description: "【責任を押し付けるな】",
-    image: "/route_endings/bad_end_09.webp",
+    image: "/route_endings/badend9.webp",
   },
 ];
 

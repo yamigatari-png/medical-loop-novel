@@ -25,6 +25,16 @@ import { MiniGameScreen } from "./components/MiniGameScreen";
 
 type Screen = "logo" | "disclaimer" | "title" | "game" | "routeMap";
 
+type StartDay = 1 | 2 | 3;
+
+const MAIN_CLEAR_ENDING_IDS = ["route_a_true", "route_a_good"] as const;
+
+const DAY_START_NODE_IDS: Record<StartDay, string> = {
+  1: "day1_black_001",
+  2: "day2_black_002",
+  3: "day2_end_placeholder",
+};
+
 const DEFAULT_BGM_VOLUME = 0.5;
 
 function normalizeSettings(settings: Settings): Settings {
@@ -112,6 +122,8 @@ function getLoopEffectCharacter(value: unknown): LoopEffectCharacter | undefined
   const [showSettings, setShowSettings] = useState(false);
   const [titleMenuOpen, setTitleMenuOpen] = useState(false);
 
+  const [startDayMenuOpen, setStartDayMenuOpen] = useState(false);
+
   const [audioUnlocked, setAudioUnlocked] = useState(false);
   const bgmRef = useRef<HTMLAudioElement | null>(null);
   const seRefs = useRef<HTMLAudioElement[]>([]);
@@ -130,6 +142,12 @@ function getLoopEffectCharacter(value: unknown): LoopEffectCharacter | undefined
   const pendingLoopDisabledReturnNodeIdRef = useRef<string | null>(null);
 
   const node = useMemo(() => getCurrentNode(state), [state]);
+
+  const hasClearedMainStory = state.seenEndings.some((endingId) =>
+  MAIN_CLEAR_ENDING_IDS.includes(
+    endingId as (typeof MAIN_CLEAR_ENDING_IDS)[number]
+  )
+);
 
   const SPECIAL_LOOP_TARGETS: Record<string, string> = {
   day1_icu_crisis_023: "day1_loop_001",
@@ -345,27 +363,47 @@ useEffect(() => {
   };
 }, [showMemo]);
 
-  function startNewGame() {
-      stopBgm();
-      stopOneShotSE();
-      stopAllLoopingSE();
-      lastAudioNodeIdRef.current = null;
+  function startNewGame(startDay: StartDay = 1) {
+  stopBgm();
+  stopOneShotSE();
+  stopAllLoopingSE();
+
+  lastAudioNodeIdRef.current = null;
+  setTitleMenuOpen(false);
+  setStartDayMenuOpen(false);
+
   const currentLang: Lang = state.settings.lang ?? "ja";
   const initial = createInitialGameState();
+  const startNodeId = DAY_START_NODE_IDS[startDay];
 
   clearSave();
 
   setState({
-  ...initial,
-  settings: normalizeSettings({
-  ...initial.settings,
-  ...state.settings,
-  bgmVolume: state.settings.bgmVolume ?? DEFAULT_BGM_VOLUME,
-  lang: currentLang,
-}),
-});
+    ...initial,
+    currentNodeId: startNodeId,
+    loopStock: initial.loopStock,
+    lastChoiceNodeId: null,
+    visitedNodeIds: [],
+    log: [],
+    seenEndings: state.seenEndings,
+    settings: normalizeSettings({
+      ...initial.settings,
+      ...state.settings,
+      bgmVolume: state.settings.bgmVolume ?? DEFAULT_BGM_VOLUME,
+      lang: currentLang,
+    }),
+  });
 
   setScreen("game");
+}
+
+function handleNewGameFromTitle() {
+  if (!hasClearedMainStory) {
+    startNewGame(1);
+    return;
+  }
+
+  setStartDayMenuOpen(true);
 }
 
 useEffect(() => {
@@ -1427,26 +1465,50 @@ if (screen === "disclaimer") {
             className="titleMenuPanel"
             onClick={(e) => e.stopPropagation()}
           >
-            <button onClick={startNewGame}>
-              {isEn ? "New Game" : "はじめから"}
-            </button>
+           {!startDayMenuOpen ? (
+  <>
+    <button onClick={handleNewGameFromTitle}>
+      {isEn ? "New Game" : "はじめから"}
+    </button>
 
-            <button onClick={continueGame}>
-              {isEn ? "Continue" : "つづきから"}
-            </button>
+    <button onClick={continueGame}>
+      {isEn ? "Continue" : "つづきから"}
+    </button>
 
-            <button onClick={() => setScreen("routeMap")}>
-              {isEn ? "Route Map" : "ルートマップ"}
-            </button>
+    {hasClearedMainStory && (
+      <button onClick={() => setScreen("routeMap")}>
+        {isEn ? "Route Map" : "ルートマップ"}
+      </button>
+    )}
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowSettings(true);
-              }}
-            >
-              {isEn ? "Settings" : "設定"}
-            </button>
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        setShowSettings(true);
+      }}
+    >
+      {isEn ? "Settings" : "設定"}
+    </button>
+  </>
+) : (
+  <>
+    <button onClick={() => startNewGame(1)}>
+      {isEn ? "Day 1 / Oct 10" : "Day1 / 10月10日"}
+    </button>
+
+    <button onClick={() => startNewGame(2)}>
+      {isEn ? "Day 2 / Oct 11" : "Day2 / 10月11日"}
+    </button>
+
+    <button onClick={() => startNewGame(3)}>
+      {isEn ? "Day 3 / Oct 12" : "Day3 / 10月12日"}
+    </button>
+
+    <button onClick={() => setStartDayMenuOpen(false)}>
+      {isEn ? "Back" : "戻る"}
+    </button>
+  </>
+)}
           </div>
         )}
 

@@ -20,7 +20,7 @@ type FeedbackLine = {
 };
 
 const CORRECT_LINES: FeedbackLine[] = [
-  { text: "よし、その調子です。", textEn: "Good. That's correct.", cv: "surgery_correct_01" },
+  { text: "その調子です。", textEn: "Good.", cv: "surgery_correct_01" },
   { text: "よろしい。", textEn: "Correct.", cv: "surgery_correct_02" },
   { text: "いい判断です。", textEn: "Good judgment.", cv: "surgery_correct_03" },
 ];
@@ -32,7 +32,7 @@ const WRONG_LINES: FeedbackLine[] = [
 ];
 
 const PERFECT_FINISH_LINES: FeedbackLine[] = [
-  { text: "素晴らしい。完璧な手際でした。", textEn: "Excellent. Perfect technique.", cv: "surgery_perfect_01" },
+  { text: "素晴らしい。完璧な手技でした。", textEn: "Excellent. Your technique was flawless.", cv: "surgery_perfect_01" },
 ];
 
 const FAIL_FINISH_LINES: FeedbackLine[] = [
@@ -122,9 +122,15 @@ setDraggedInstrument(null);
     };
   }, []);
 
-  function getQuestionPrompt() {
-    return lang === "en" && question.promptEn ? question.promptEn : question.prompt;
-  }
+  function getHighlightedPrompt() {
+  const prompt =
+    lang === "en" && question.promptEn ? question.promptEn : question.prompt;
+
+  return prompt.replace(
+    /\[(.*?)\]/g,
+    '<span class="redText">$1</span>'
+  );
+}
 
   function getFeedbackText(line: FeedbackLine) {
     return lang === "en" && line.textEn ? line.textEn : line.text;
@@ -332,7 +338,12 @@ setDraggedInstrument(null);
             {lang === "en" ? "s" : " 秒"}
           </div>
 
-          <div className="miniGamePrompt">{getQuestionPrompt()}</div>
+          <div
+  className="miniGamePrompt"
+  dangerouslySetInnerHTML={{
+    __html: getHighlightedPrompt(),
+  }}
+/>
 
           <div className="miniGameMistake">
             {lang === "en" ? "Mistakes" : "ミス"} {mistakeCount} /{" "}
