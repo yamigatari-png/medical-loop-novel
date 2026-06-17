@@ -1475,11 +1475,9 @@ if (screen === "disclaimer") {
       {isEn ? "Continue" : "つづきから"}
     </button>
 
-    {hasClearedMainStory && (
-      <button onClick={() => setScreen("routeMap")}>
-        {isEn ? "Route Map" : "ルートマップ"}
-      </button>
-    )}
+    <button onClick={() => setScreen("routeMap")}>
+  {isEn ? "Route Map" : "ルートマップ"}
+</button>
 
     <button
       onClick={(e) => {
@@ -1522,9 +1520,11 @@ if (screen === "disclaimer") {
   return (
     <div className="appFrame">
       <RouteMapScreen
-        seenEndings={state.seenEndings}
-        onBack={() => setScreen("title")}
-      />
+  seenEndings={state.seenEndings}
+  visitedNodeIds={state.visitedNodeIds}
+  lang={state.settings.lang}
+  onBack={() => setScreen("title")}
+/>
     </div>
   );
 }
