@@ -36,14 +36,20 @@ const DAY_START_NODE_IDS: Record<StartDay, string> = {
 };
 
 const DEFAULT_BGM_VOLUME = 0.5;
+const DEFAULT_SE_VOLUME = 0.8;
+const DEFAULT_CV_VOLUME = 0.6;
+
+function clampVolume(value: number | undefined, fallback: number) {
+  if (typeof value !== "number" || Number.isNaN(value)) return fallback;
+  return Math.min(1, Math.max(0, value));
+}
 
 function normalizeSettings(settings: Settings): Settings {
   return {
     ...settings,
-    bgmVolume:
-      settings.bgmVolume === undefined
-        ? DEFAULT_BGM_VOLUME
-        : settings.bgmVolume,
+    bgmVolume: clampVolume(settings.bgmVolume, DEFAULT_BGM_VOLUME),
+    seVolume: clampVolume(settings.seVolume, DEFAULT_SE_VOLUME),
+    cvVolume: clampVolume(settings.cvVolume, DEFAULT_CV_VOLUME),
   };
 }
 
@@ -661,12 +667,12 @@ function fadeOutAudio(
   durationMs = 800,
   onDone?: () => void
 ) {
-  const startVolume = audio.volume;
+  const startVolume = clampVolume(audio.volume, 1);
   const startTime = performance.now();
 
   function tick(now: number) {
     const progress = Math.min(1, (now - startTime) / durationMs);
-    audio.volume = startVolume * (1 - progress);
+    audio.volume = clampVolume(startVolume * (1 - progress), 0);
 
     if (progress < 1) {
       requestAnimationFrame(tick);
@@ -675,7 +681,7 @@ function fadeOutAudio(
 
     audio.pause();
     audio.currentTime = 0;
-    audio.volume = startVolume;
+    audio.volume = clampVolume(startVolume, 1);
     onDone?.();
   }
 
@@ -834,7 +840,7 @@ function playSE(key: string) {
   if (!audioUnlocked) return;
 
   const se = new Audio(`/se/${key}.mp3`);
-  se.volume = state.settings.seVolume ?? 0.8;
+  se.volume = clampVolume(state.settings.seVolume, DEFAULT_SE_VOLUME);
 
   seRefs.current.push(se);
 
@@ -868,7 +874,7 @@ function syncLoopingSE(keys: string[]) {
 
     const se = new Audio(`/se/${key}.mp3`);
     se.loop = true;
-    se.volume = state.settings.seVolume ?? 0.8;
+    se.volume = clampVolume(state.settings.seVolume, DEFAULT_SE_VOLUME);
 
     loopingSeRefs.current[key] = se;
 
@@ -893,7 +899,7 @@ function playCV(key: string) {
   if (!audioUnlocked) return;
 
   const cv = new Audio(`/cv/${key}.mp3`);
-  cv.volume = state.settings.cvVolume ?? 0.6;
+  cv.volume = clampVolume(state.settings.cvVolume, DEFAULT_CV_VOLUME);
 
   cvRefs.current.push(cv);
 
@@ -906,7 +912,10 @@ function playCV(key: string) {
 
 function playClickSE(volumeOverride?: number) {
   const click = new Audio("/se/click.mp3");
-  click.volume = Math.min(1, volumeOverride ?? state.settings.seVolume ?? 0.8);
+  click.volume = clampVolume(
+  volumeOverride ?? state.settings.seVolume,
+  DEFAULT_SE_VOLUME
+);
   click.currentTime = 0;
   click.play().catch((err) => {
     console.warn("[ClickSE] play failed:", err);

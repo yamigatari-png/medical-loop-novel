@@ -111,6 +111,7 @@ export type LineNode = {
   text: string;
   textEn?: string;
   background?: string;
+  tvNoise?: boolean;
 
   overlay?: "dark" | "black" | "white" | "red" | "noiseText"| "loopVortex";
   glitch?: boolean;

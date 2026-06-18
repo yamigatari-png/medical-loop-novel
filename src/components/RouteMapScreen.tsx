@@ -48,7 +48,7 @@ const TRUE_ENDINGS: RouteEnding[] = [
     dateEn: "Day 3 / Oct 12",
     text: "それでも、前へ進む。",
     textEn: "Even so, he moves forward.",
-    image: "/route_endings/true_end.webp",
+    image: "/backgrounds/true_end.webp",
   },
 ];
 
@@ -61,7 +61,7 @@ const GOOD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 3 / Oct 12",
     text: "医療に、やり直しはない。",
     textEn: "There are no do-overs in medicine.",
-    image: "/route_endings/good_end.webp",
+    image: "/backgrounds/good_end.webp",
   },
 ];
 
@@ -74,7 +74,7 @@ const DAY1_BAD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 1 / Oct 10",
     text: "病院へ行け",
     textEn: "Go to the hospital",
-    image: "/route_endings/phone.webp",
+    image: "/backgrounds/phone.webp",
   },
   {
     ids: ["day1_badend_walk"],
@@ -84,7 +84,7 @@ const DAY1_BAD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 1 / Oct 10",
     text: "歩き☓",
     textEn: "Do not walk.",
-    image: "/route_endings/badend2.webp",
+    image: "/backgrounds/badend2.webp",
   },
   {
     ids: ["day1_badend_bus"],
@@ -94,7 +94,7 @@ const DAY1_BAD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 1 / Oct 10",
     text: "バス☓",
     textEn: "Bus ×",
-    image: "/route_endings/badend3.webp",
+    image: "/backgrounds/badend3.webp",
   },
   {
     ids: ["day1_badend_gokon"],
@@ -104,7 +104,7 @@ const DAY1_BAD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 1 / Oct 10",
     text: "約束を守れ",
     textEn: "Keep your promise",
-    image: "/route_endings/badend4.webp",
+    image: "/backgrounds/badend4.webp",
   },
   {
     ids: ["day1_badend_drink_drive"],
@@ -114,7 +114,7 @@ const DAY1_BAD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 1 / Oct 10",
     text: "飲酒運転☓",
     textEn: "No drink driving",
-    image: "/route_endings/badend5.webp",
+    image: "/backgrounds/badend5.webp",
   },
 ];
 
@@ -129,7 +129,7 @@ const DAY3_BAD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 3 / Oct 12",
     text: "報告する",
     textEn: "Report it.",
-    image: "/route_endings/badend6.webp",
+    image: "/backgrounds/badend6.webp",
   },
   {
     ids: ["day3_remove_gauze_bad_end"],
@@ -139,7 +139,7 @@ const DAY3_BAD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 3 / Oct 12",
     text: "摘出×",
     textEn: "Don't remove it.",
-    image: "/route_endings/badend7.webp",
+    image: "/backgrounds/badend7.webp",
   },
   {
     ids: ["day3_run_away_bad_end"],
@@ -149,7 +149,7 @@ const DAY3_BAD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 3 / Oct 12",
     text: "逃げちゃダメだ",
     textEn: "Face it.",
-    image: "/route_endings/badend8.webp",
+    image: "/backgrounds/badend8.webp",
   },
   {
     ids: ["day3_blame_takamiya_bad_end", "day3_blame_bad_end"],
@@ -159,7 +159,7 @@ const DAY3_BAD_ENDINGS: RouteEnding[] = [
     dateEn: "Day 3 / Oct 12",
     text: "責任を押し付けるな",
     textEn: "Don't shift the blame",
-    image: "/route_endings/badend9.webp",
+    image: "/backgrounds/badend9.webp",
   },
 ];
 
@@ -172,7 +172,7 @@ const EXTRA_ENDINGS: RouteEnding[] = [
     dateEn: "Day 1 / Oct 10",
     text: "スーパードクター爆誕",
     textEn: "[A Super Doctor Is Born]",
-    image: "/route_endings/extra_end.webp",
+    image: "/backgrounds/extra_end.webp",
   },
 ];
 

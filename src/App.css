@@ -314,10 +314,12 @@ button {
 .bg-badend9{ background-image: url("/backgrounds/badend9.webp"); }
 .bg-good_end{ background-image: url("/backgrounds/good_end.webp"); }
 .bg-true_end{ background-image: url("/backgrounds/true_end.webp"); }
+.bg-extra_end{ background-image: url("/backgrounds/extra_end.webp"); }
 
 
 .bg-true_end,
 .bg-good_end,
+.bg-extra_end,
 .bg-badend2,
 .bg-badend3,
 .bg-badend4,
@@ -1783,7 +1785,14 @@ body.armMemoOpen .centerChoices button {
 }
 
 .loopVortexScreen {
-  animation: loopGrayFade 1500ms linear forwards;
+  animation: none;
+}
+
+.loopVortexScreen .characterArea {
+  animation:
+    loopHorizontalJitter 1000ms steps(1) forwards,
+    loopUneasyGray 1000ms linear forwards;
+  transform-origin: center center;
 }
 
 @keyframes loopGrayFade {
@@ -3353,5 +3362,111 @@ body.armMemoOpen .textBox {
 @media (max-width: 900px) {
   .storyChartDays {
     grid-template-columns: 1fr;
+  }
+}
+
+.tvNoiseScreen {
+  animation: tvNoiseUnevenShake 2.4s linear infinite;
+}
+
+.tvNoiseScreen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 850;
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.12) 0px,
+      rgba(255,255,255,0.12) 1px,
+      rgba(0,0,0,0.12) 2px,
+      rgba(0,0,0,0.12) 4px
+    );
+
+  animation: tvNoiseBurst 2.4s linear infinite;
+}
+
+@keyframes tvNoiseUnevenShake {
+  0% { transform: translate(0, 0); filter: contrast(1.03); }
+  12% { transform: translate(0, 0); filter: contrast(1.03); }
+
+  18% { transform: translate(-1px, 0); filter: contrast(1.08); }
+  22% { transform: translate(1px, 0); filter: contrast(1.05); }
+  26% { transform: translate(0, 0); filter: contrast(1.03); }
+
+  48% { transform: translate(0, 0); filter: contrast(1.03); }
+
+  52% { transform: translate(-2px, 1px); filter: contrast(1.12); }
+  54% { transform: translate(2px, -1px); filter: contrast(1.16); }
+  56% { transform: translate(-1px, 1px); filter: contrast(1.1); }
+  60% { transform: translate(0, 0); filter: contrast(1.03); }
+
+  85% { transform: translate(0, 0); filter: contrast(1.03); }
+
+  90% { transform: translate(1px, 0); filter: contrast(1.08); }
+  100% { transform: translate(0, 0); filter: contrast(1.03); }
+}
+
+@keyframes tvNoiseUnevenScan {
+  0% { opacity: 0.12; background-position: 0 0; }
+  18% { opacity: 0.34; background-position: 0 4px; }
+  26% { opacity: 0.16; background-position: 0 0; }
+
+  52% { opacity: 0.46; background-position: 0 8px; }
+  60% { opacity: 0.18; background-position: 0 -2px; }
+
+  90% { opacity: 0.32; background-position: 0 3px; }
+  100% { opacity: 0.14; background-position: 0 0; }
+}
+
+@keyframes tvNoiseBurst {
+
+  0%,
+  17%,
+  27%,
+  51%,
+  61%,
+  89%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  /* 小ジッ */
+
+  18% {
+    opacity: 0.35;
+    transform: translateX(-4px);
+  }
+
+  22% {
+    opacity: 0.25;
+    transform: translateX(3px);
+  }
+
+  /* 大ジジジッ */
+
+  52% {
+    opacity: 0.65;
+    transform: translateX(-12px);
+  }
+
+  54% {
+    opacity: 0.85;
+    transform: translateX(10px);
+  }
+
+  56% {
+    opacity: 0.55;
+    transform: translateX(-8px);
+  }
+
+  /* 小ジッ */
+
+  90% {
+    opacity: 0.35;
+    transform: translateX(5px);
   }
 }

@@ -422,6 +422,12 @@ const LOOP_WAIT_NODE_IDS = [
   "day3_loop_disabled_0015",
 ];
 
+const LOOP_ONLY_NODE_IDS = [
+  "day1_icu_crisis_023",
+];
+
+const isLoopOnlyNode = LOOP_ONLY_NODE_IDS.includes(node.id);
+
 const LOOP_BUTTON_HIDDEN_NODE_IDS = [
   "day1_loop_002",
   "day1_flashback_night_001",
@@ -858,12 +864,14 @@ useEffect(() => {
   return (
     <div
   className={`novelScreen ${backgroundClass} ${
-    "glitch" in node && node.glitch ? "screenGlitch" : ""
-  } ${
-    "overlay" in node && node.overlay === "loopVortex"
-  ? "loopVortexScreen loopStrongGlitch"
-  : ""
-  }`}
+  "glitch" in node && node.glitch ? "screenGlitch" : ""
+} ${
+  "overlay" in node && node.overlay === "loopVortex"
+    ? "loopVortexScreen loopStrongGlitch"
+    : ""
+} ${
+  "tvNoise" in node && node.tvNoise ? "tvNoiseScreen" : ""
+}`}
   onClick={(e) => {
   if (node.type === "line" || node.type === "miniGame") {
     handleTextClick(e);
@@ -899,7 +907,7 @@ useEffect(() => {
       )}
   </div>
 )}
-      {!isCinematicUiHidden && (
+      {!isCinematicUiHidden && !isLoopOnlyNode && (
   <div className="topButtons">
     <button onClick={(e) => { e.stopPropagation(); onBackTitle(); }}>
       {t.title}
@@ -913,7 +921,7 @@ useEffect(() => {
   </div>
 )}
 
-      {canShowArmButton && !isCinematicUiHidden && (
+      {canShowArmButton && !isCinematicUiHidden && !isLoopOnlyNode && (
   <button
     className="armButtonInText"
     disabled={isArmDisabled}
@@ -1040,6 +1048,7 @@ const isSpeaking =
   </button>
 )}
 
+ {!isLoopOnlyNode && (
   <div className="textBoxBottomControls">
     <button
   type="button"
@@ -1059,6 +1068,7 @@ const isSpeaking =
       {autoMode ? (lang === "en" ? "Auto On" : "オート中") : t.auto}
     </button>
   </div>
+  )}
 </div>
 
         {node.type === "bad" && (
