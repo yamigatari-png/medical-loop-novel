@@ -580,12 +580,18 @@ const [showMiniGameStartButton, setShowMiniGameStartButton] = useState(false);
   character: StoryNode extends never ? never : any;
 } | null>(null);
 
-const [crossfadeFromVisual, setCrossfadeFromVisual] = useState<{
-  background: string | null;
-  character: {
+const [crossfadeVisual, setCrossfadeVisual] = useState<{
+  fromBackground: string | null;
+  toBackground: string | null;
+  fromCharacter: {
     name: string;
     position: "left" | "center" | "right";
   } | null;
+  toCharacter: {
+    name: string;
+    position: "left" | "center" | "right";
+  } | null;
+  durationMs: number;
 } | null>(null);
 
 useEffect(() => {
@@ -604,12 +610,18 @@ useEffect(() => {
     node.crossfade === true &&
     prev &&
     prev.background &&
-    prev.background !== currentBackground
+    currentBackground
   ) {
-    setCrossfadeFromVisual(prev);
+    setCrossfadeVisual({
+      fromBackground: prev.background,
+      toBackground: currentBackground,
+      fromCharacter: prev.character,
+      toCharacter: currentCharacter,
+      durationMs: node.durationMs,
+    });
 
     const timer = window.setTimeout(() => {
-      setCrossfadeFromVisual(null);
+      setCrossfadeVisual(null);
     }, node.durationMs);
 
     prevVisualRef.current = {
@@ -620,7 +632,7 @@ useEffect(() => {
     return () => window.clearTimeout(timer);
   }
 
-  setCrossfadeFromVisual(null);
+  setCrossfadeVisual(null);
 
   prevVisualRef.current = {
     background: currentBackground,
@@ -694,17 +706,31 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-    if (!autoMode) return;
-    if (node.type !== "line") return;
-    
-    if (isTyping) return;
+  if (!autoMode) return;
+  if (node.type !== "line") return;
 
-    const timer = window.setTimeout(() => {
-      onNext();
-    }, state.settings.autoSpeed);
+  if (isTyping) return;
 
-    return () => window.clearTimeout(timer);
-  }, [autoMode, node.id, node.type, isTyping, onNext, state.settings.autoSpeed]);
+  // 強制ループ待機LINEではオートを止める
+  // プレイヤーにループボタンを押させる
+  if (LOOP_WAIT_NODE_IDS.includes(node.id)) {
+    setAutoMode(false);
+    return;
+  }
+
+  const timer = window.setTimeout(() => {
+    onNext();
+  }, state.settings.autoSpeed);
+
+  return () => window.clearTimeout(timer);
+}, [
+  autoMode,
+  node.id,
+  node.type,
+  isTyping,
+  onNext,
+  state.settings.autoSpeed,
+]);
 
   useEffect(() => {
   if (!skipMode) return;
@@ -885,28 +911,58 @@ useEffect(() => {
   }
 }}
     >
-{crossfadeFromVisual && (
+
+{crossfadeVisual && (
   <div
     className="visualCrossfadeLayer"
     style={{
-      animationDuration:
-        node.type === "effect" ? `${node.durationMs}ms` : "1200ms",
+      animationDuration: `${crossfadeVisual.durationMs}ms`,
     }}
   >
-    {crossfadeFromVisual.background && (
-      <div className={`visualCrossfadeBackground bg-${crossfadeFromVisual.background}`} />
+    {crossfadeVisual.toBackground && (
+      <div
+        className={`visualCrossfadeBackground visualCrossfadeTo bg-${crossfadeVisual.toBackground}`}
+        style={{
+          animationDuration: `${crossfadeVisual.durationMs}ms`,
+        }}
+      />
     )}
 
-    {crossfadeFromVisual.character &&
-      CHARACTER_IMAGES[crossfadeFromVisual.character.name] && (
+    {crossfadeVisual.fromBackground && (
+      <div
+        className={`visualCrossfadeBackground visualCrossfadeFrom bg-${crossfadeVisual.fromBackground}`}
+        style={{
+          animationDuration: `${crossfadeVisual.durationMs}ms`,
+        }}
+      />
+    )}
+
+    {crossfadeVisual.toCharacter &&
+      CHARACTER_IMAGES[crossfadeVisual.toCharacter.name] && (
         <img
-          className={`characterImage ${crossfadeFromVisual.character.position} visualCrossfadeCharacter`}
-          src={CHARACTER_IMAGES[crossfadeFromVisual.character.name].closed}
-          alt={crossfadeFromVisual.character.name}
+          className={`characterImage ${crossfadeVisual.toCharacter.position} visualCrossfadeCharacter visualCrossfadeTo`}
+          src={CHARACTER_IMAGES[crossfadeVisual.toCharacter.name].closed}
+          alt={crossfadeVisual.toCharacter.name}
+          style={{
+            animationDuration: `${crossfadeVisual.durationMs}ms`,
+          }}
+        />
+      )}
+
+    {crossfadeVisual.fromCharacter &&
+      CHARACTER_IMAGES[crossfadeVisual.fromCharacter.name] && (
+        <img
+          className={`characterImage ${crossfadeVisual.fromCharacter.position} visualCrossfadeCharacter visualCrossfadeFrom`}
+          src={CHARACTER_IMAGES[crossfadeVisual.fromCharacter.name].closed}
+          alt={crossfadeVisual.fromCharacter.name}
+          style={{
+            animationDuration: `${crossfadeVisual.durationMs}ms`,
+          }}
         />
       )}
   </div>
 )}
+
       {!isCinematicUiHidden && !isLoopOnlyNode && (
   <div className="topButtons">
     <button onClick={(e) => { e.stopPropagation(); onBackTitle(); }}>

@@ -219,6 +219,17 @@ const LOOP_ZERO_RESCUE_ALLOWED_NODE_IDS = [
   "day2_anaphylaxis_loop_wait_001",
   "day2_emergency_surgery_fail_002",
   "day2_shiori_not_returned_002",
+
+  // Day3 強制ループ待機
+  "day3_keep_silent_0015",
+  "day3_loop_disabled_0015",
+
+  // Day3 BadEnd
+  "day3_keep_silent_bad_end",
+  "day3_remove_gauze_bad_end",
+  "day3_run_away_bad_end",
+  "day3_blame_takamiya_bad_end",
+  "day3_blame_bad_end",
 ];
 
 const NORMAL_LOOP_ALLOWED_NODE_IDS = [
@@ -468,12 +479,6 @@ useEffect(() => {
       ? prev.seenEndings
       : [...prev.seenEndings, node.endingId],
   }));
-
-  const timer = window.setTimeout(() => {
-    setScreen("title");
-  }, 3000);
-
-  return () => window.clearTimeout(timer);
 }, [node.id, node.type]);
 
 useEffect(() => {
@@ -618,7 +623,7 @@ if (node.type === "bad" && node.next) {
 
   setState((prev) => ({
     ...prev,
-    loopStock: prev.loopStock + 10,
+    loopStock: prev.loopStock + 15,
     currentNodeId: rescueTarget,
     visitedNodeIds: prev.visitedNodeIds.includes(rescueTarget)
       ? prev.visitedNodeIds
