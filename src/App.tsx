@@ -236,6 +236,7 @@ const NORMAL_LOOP_ALLOWED_NODE_IDS = [
   "day1_living_loop_015",
   "day1_loop_title_004",
   "day2_morning_001",
+  "day2_black_002",
   "day3_chase_wakeup_001",
 
   // デバッグ用。day1_black_001 から直接飛ばして確認するため
@@ -1188,10 +1189,6 @@ function handleLoopButtonPress() {
   return;
 }
 
-    if (state.flags.loop_disabled) {
-    return;
-  }
-
   if (state.loopStock <= 0) {
   if (!LOOP_ZERO_RESCUE_ALLOWED_NODE_IDS.includes(node.id)) {
     pendingLoopDisabledReturnNodeIdRef.current = node.id;
@@ -1260,6 +1257,10 @@ setLoopDisabledVisual({
         : [...prev.visitedNodeIds, "normal_loop_effect_001"],
     }));
 
+    return;
+  }
+
+  if (state.flags.loop_disabled) {
     return;
   }
 

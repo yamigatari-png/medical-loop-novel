@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { GameState, StoryNode, ItemKey, MiniGameId } from "../types";
 import { canShowChoice, getPenState } from "../engine/storyEngine";
 import type { Lang } from "../types";
@@ -273,6 +273,7 @@ export function NovelScreen({
   "day1_bedroom_loop_002",
   "day1_living_loop_001",
   "day1_loop_title_004",
+  "day2_black_002",
   "day3_no_chase_morning_002",
   "day3_chase_wakeup_001",
 
@@ -315,43 +316,51 @@ const ARM_DISABLED_NODE_IDS = [
   "day2_black_001",
   "day2_black_0015",
   "day2_black_002",
-  "day2_flashback_room_001",
-  "day2_flashback_room_002",
-  "day2_flashback_room_003",
-  "day2_flashback_room_004",
-  "day2_flashback_room_005",
-  "day2_flashback_room_006",
-  "day2_flashback_room_007",
-  "day2_flashback_room_008",
-  "day2_flashback_room_0085",
-  "day2_flashback_room_009",
-  "day2_flashback_room_010",
-  "day2_flashback_room_011",
-  "day2_flashback_room_012",
-  "day2_flashback_room_013",
-  "day2_flashback_room_014",
-  "day2_flashback_room_015",
-  "day2_flashback_room_0155",
-  "day2_end_placeholder",
 
-  "day2_no_chase_flashback_room_001",
-  "day2_no_chase_flashback_room_002",
-  "day2_no_chase_flashback_room_003",
-  "day2_no_chase_flashback_room_004",
-  "day2_no_chase_flashback_room_005",
-  "day2_no_chase_flashback_room_006",
-  "day2_no_chase_flashback_room_007",
-  "day2_no_chase_flashback_room_008",
-  "day2_no_chase_flashback_room_0085",
-  "day2_no_chase_flashback_room_009",
-  "day2_no_chase_flashback_room_010",
-  "day2_no_chase_flashback_room_011",
-  "day2_no_chase_flashback_room_012",
-  "day2_no_chase_flashback_room_013",
-  "day2_no_chase_flashback_room_014",
-  "day2_no_chase_flashback_room_015",
-  "day2_no_chase_flashback_room_0155",
-  "day2_no_chase_end_placeholder",
+// Day2 回想
+"day2_flashback_room_001",
+"day2_flashback_room_002",
+"day2_flashback_room_003",
+"day2_flashback_room_004",
+"day2_flashback_room_0045",
+"day2_flashback_room_005",
+"day2_flashback_room_006",
+"day2_flashback_room_007",
+"day2_flashback_room_008",
+"day2_flashback_room_0085",
+"day2_flashback_room_009",
+"day2_flashback_room_010",
+"day2_flashback_room_011",
+"day2_flashback_room_012",
+"day2_flashback_room_0125",
+"day2_flashback_room_013",
+"day2_flashback_room_014",
+"day2_flashback_room_015",
+"day2_flashback_room_016",
+"day2_flashback_room_0155",
+"day2_flashback_room_017",
+
+// Day2 追いかけなかった版
+"day2_no_chase_flashback_room_001",
+"day2_no_chase_flashback_room_002",
+"day2_no_chase_flashback_room_003",
+"day2_no_chase_flashback_room_004",
+"day2_no_chase_flashback_room_0045",
+"day2_no_chase_flashback_room_005",
+"day2_no_chase_flashback_room_006",
+"day2_no_chase_flashback_room_007",
+"day2_no_chase_flashback_room_008",
+"day2_no_chase_flashback_room_0085",
+"day2_no_chase_flashback_room_009",
+"day2_no_chase_flashback_room_010",
+"day2_no_chase_flashback_room_011",
+"day2_no_chase_flashback_room_012",
+"day2_no_chase_flashback_room_0125",
+"day2_no_chase_flashback_room_013",
+"day2_no_chase_flashback_room_014",
+"day2_no_chase_flashback_room_015",
+"day2_no_chase_flashback_room_016",
+"day2_no_chase_flashback_room_0155",
 ];
 
 const BUTTONS_HIDDEN_AFTER_NODE_IDS = [
@@ -460,43 +469,51 @@ const LOOP_BUTTON_HIDDEN_NODE_IDS = [
   "day2_black_001",
   "day2_black_0015",
   "day2_black_002",
-  "day2_flashback_room_001",
-  "day2_flashback_room_002",
-  "day2_flashback_room_003",
-  "day2_flashback_room_004",
-  "day2_flashback_room_005",
-  "day2_flashback_room_006",
-  "day2_flashback_room_007",
-  "day2_flashback_room_008",
-  "day2_flashback_room_0085",
-  "day2_flashback_room_009",
-  "day2_flashback_room_010",
-  "day2_flashback_room_011",
-  "day2_flashback_room_012",
-  "day2_flashback_room_013",
-  "day2_flashback_room_014",
-  "day2_flashback_room_015",
-  "day2_flashback_room_0155",
-  "day2_end_placeholder",
 
-  "day2_no_chase_flashback_room_001",
-  "day2_no_chase_flashback_room_002",
-  "day2_no_chase_flashback_room_003",
-  "day2_no_chase_flashback_room_004",
-  "day2_no_chase_flashback_room_005",
-  "day2_no_chase_flashback_room_006",
-  "day2_no_chase_flashback_room_007",
-  "day2_no_chase_flashback_room_008",
-  "day2_no_chase_flashback_room_0085",
-  "day2_no_chase_flashback_room_009",
-  "day2_no_chase_flashback_room_010",
-  "day2_no_chase_flashback_room_011",
-  "day2_no_chase_flashback_room_012",
-  "day2_no_chase_flashback_room_013",
-  "day2_no_chase_flashback_room_014",
-  "day2_no_chase_flashback_room_015",
-  "day2_no_chase_flashback_room_0155",
-  "day2_no_chase_end_placeholder",
+  // Day2 回想
+"day2_flashback_room_001",
+"day2_flashback_room_002",
+"day2_flashback_room_003",
+"day2_flashback_room_004",
+"day2_flashback_room_0045",
+"day2_flashback_room_005",
+"day2_flashback_room_006",
+"day2_flashback_room_007",
+"day2_flashback_room_008",
+"day2_flashback_room_0085",
+"day2_flashback_room_009",
+"day2_flashback_room_010",
+"day2_flashback_room_011",
+"day2_flashback_room_012",
+"day2_flashback_room_0125",
+"day2_flashback_room_013",
+"day2_flashback_room_014",
+"day2_flashback_room_015",
+"day2_flashback_room_016",
+"day2_flashback_room_0155",
+"day2_flashback_room_017",
+
+// Day2 追いかけなかった版
+"day2_no_chase_flashback_room_001",
+"day2_no_chase_flashback_room_002",
+"day2_no_chase_flashback_room_003",
+"day2_no_chase_flashback_room_004",
+"day2_no_chase_flashback_room_0045",
+"day2_no_chase_flashback_room_005",
+"day2_no_chase_flashback_room_006",
+"day2_no_chase_flashback_room_007",
+"day2_no_chase_flashback_room_008",
+"day2_no_chase_flashback_room_0085",
+"day2_no_chase_flashback_room_009",
+"day2_no_chase_flashback_room_010",
+"day2_no_chase_flashback_room_011",
+"day2_no_chase_flashback_room_012",
+"day2_no_chase_flashback_room_0125",
+"day2_no_chase_flashback_room_013",
+"day2_no_chase_flashback_room_014",
+"day2_no_chase_flashback_room_015",
+"day2_no_chase_flashback_room_016",
+"day2_no_chase_flashback_room_0155",
 ];
 
   const LOOP_BUTTON_START_NODE_IDS = [
@@ -505,6 +522,7 @@ const LOOP_BUTTON_HIDDEN_NODE_IDS = [
   "day1_loop_title_004",
   "day3_no_chase_morning_002",
   "day3_chase_wakeup_001",
+  "day2_black_002",
 
   "day2_evening_choice_first",
 ];
@@ -594,7 +612,7 @@ const [crossfadeVisual, setCrossfadeVisual] = useState<{
   durationMs: number;
 } | null>(null);
 
-useEffect(() => {
+useLayoutEffect(() => {
   const currentBackground =
     "background" in node && node.background ? node.background : null;
 
@@ -608,9 +626,9 @@ useEffect(() => {
   if (
     node.type === "effect" &&
     node.crossfade === true &&
-    prev &&
-    prev.background &&
-    currentBackground
+    prev?.background &&
+    currentBackground &&
+    prev.background !== currentBackground
   ) {
     setCrossfadeVisual({
       fromBackground: prev.background,
@@ -620,14 +638,14 @@ useEffect(() => {
       durationMs: node.durationMs,
     });
 
-    const timer = window.setTimeout(() => {
-      setCrossfadeVisual(null);
-    }, node.durationMs);
-
     prevVisualRef.current = {
       background: currentBackground,
       character: currentCharacter,
     };
+
+    const timer = window.setTimeout(() => {
+      setCrossfadeVisual(null);
+    }, node.durationMs);
 
     return () => window.clearTimeout(timer);
   }

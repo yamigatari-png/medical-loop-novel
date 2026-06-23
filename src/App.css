@@ -102,30 +102,6 @@ button {
   right: 15%;
 }
 
-.textBox {
-  position: absolute;
-  left: 7%;
-  right: 7%;
-  bottom: clamp(18px, 3.2vh, 34px);
-
-  height: clamp(150px, 24vh, 260px);
-  min-height: 0;
-  max-height: none;
-
-  padding:
-    clamp(24px, 3.5vh, 38px)
-    clamp(28px, 5vw, 64px)
-    clamp(18px, 2.5vh, 26px)
-    clamp(28px, 5vw, 64px);
-
-  border: 1px solid rgba(255,255,255,0.22);
-  border-radius: clamp(14px, 2vh, 22px);
-  background: rgba(0, 0, 0, 0.68);
-  box-shadow: none;
-  z-index: 30;
-  box-sizing: border-box;
-}
-
 .speakerName {
   display: inline-block;
   margin-bottom: 12px;
@@ -2381,6 +2357,7 @@ body.armMemoOpen .centerChoices button {
   height: min(100vh, calc(100vw * 9 / 16));
   overflow: hidden;
   background: #000;
+  container-type: size;
 }
 
 html,
@@ -3504,4 +3481,26 @@ body.armMemoOpen .textBox {
   font-size: clamp(22px, 2.2vw, 34px);
   padding: 12px 32px;
   line-height: 1.2;
+}
+
+.appFrame {
+  container-type: size;
+}
+
+/* 小さいウィンドウの時だけ、テキスト欄を少し低くする */
+@container (max-height: 760px) {
+  .appFrame .textBox {
+    min-height: 220px;
+    max-height: 220px;
+    padding: 32px 64px 22px 64px;
+  }
+}
+
+/* さらに小さい時だけ、もう少し低くする */
+@container (max-height: 620px) {
+  .appFrame .textBox {
+    min-height: 190px;
+    max-height: 190px;
+    padding: 28px 56px 18px 56px;
+  }
 }
