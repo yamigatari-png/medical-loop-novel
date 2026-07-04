@@ -729,9 +729,7 @@ button {
   text-align: center;
   line-height: 1.15;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
 
   white-space: nowrap;
   overflow: hidden;
@@ -1337,6 +1335,18 @@ body.armMemoOpen .armButtonInText {
   54% { transform: translate(3px, 1px); }
   72% { transform: translate(-2px, -1px); }
   100% { transform: translate(0, 0); }
+}
+
+.screenGlitchLoop {
+  animation: screenGlitchShakeLoop 0.55s ease-in-out infinite;
+}
+
+@keyframes screenGlitchShakeLoop {
+  0%   { transform: translate(0px, 0px); }
+  25%  { transform: translate(-1px, 0.5px); }
+  50%  { transform: translate(1px, -0.5px); }
+  75%  { transform: translate(-0.5px, -0.5px); }
+  100% { transform: translate(0px, 0px); }
 }
 
 .textBoxOverlay-dark {
@@ -2218,7 +2228,6 @@ body.armMemoOpen .centerChoices button {
   width: 100%;
   height: 100vh;
 
-  background-image: url("/ui/title_bg.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -2595,9 +2604,9 @@ body,
 
 .armMemoOverlay.armMemoBehindText .armMemoPanel {
   z-index: 21;
-  left: 0;
-  bottom: 18%;
-  width: min(58%, 820px);
+  left: -4%;
+  bottom: 34%;
+  width: min(54%, 760px);
   opacity: 0.95;
 }
 

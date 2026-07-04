@@ -46,9 +46,11 @@ export type BadKind =
   text?: string;
   textEn?: string;
   glitch?: boolean;
+  glitchLoop?: boolean;
   se?: string[];
   seLoop?: string[];
   bgm?: string;
+  cv?: string;
   fade?: "in" | "out" | "inOut" | "whiteOut"| "tvOff";
   characterFade?: "in" | "out";
   screenTint?: "red";
@@ -115,6 +117,7 @@ export type LineNode = {
 
   overlay?: "dark" | "black" | "white" | "red" | "noiseText"| "loopVortex";
   glitch?: boolean;
+  glitchLoop?: boolean;
 
   character?: StoryCharacter;
   characters?: StoryCharacter[];

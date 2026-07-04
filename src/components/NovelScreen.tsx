@@ -178,6 +178,7 @@ const SPEAKER_NAME = {
     患者3: "患者3",
     救急隊: "救急隊",
     救急患者: "救急患者",
+    麻酔科医: "麻酔科医",
   },
   en: {
     湊: "Minato",
@@ -192,6 +193,7 @@ const SPEAKER_NAME = {
     患者3: "Patient3",
     救急隊: "Paramedic",
     救急患者: "Emergency patient",
+    麻酔科医: "Anesthesiologist",
   },
 } as const;
   
@@ -203,6 +205,7 @@ function getSpeakerName(name: string | undefined, lang: Lang): string {
 type Props = {
   state: GameState;
   node: StoryNode;
+  isCvMouthOpen: boolean;
   lang: Lang;
   onNext: () => void;
   onChoice: (index: number) => void;
@@ -243,6 +246,7 @@ export function NovelScreen({
   state,
   node,
   lang,
+  isCvMouthOpen,
   onNext,
   loopEffectVisual,
   loopDisabledVisual,
@@ -437,6 +441,14 @@ const LOOP_ONLY_NODE_IDS = [
 
 const isLoopOnlyNode = LOOP_ONLY_NODE_IDS.includes(node.id);
 
+const CLICK_TO_TITLE_END_NODE_IDS = [
+  "day3_route_a_true_end",
+  "day3_route_a_good_end",
+  "day1_surgery_success1_002",
+];
+
+const isClickToTitleEnd = CLICK_TO_TITLE_END_NODE_IDS.includes(node.id);
+
 const LOOP_BUTTON_HIDDEN_NODE_IDS = [
   "day1_loop_002",
   "day1_flashback_night_001",
@@ -578,15 +590,23 @@ const visualCharacters =
             : [];
 
 const backgroundClass = visualBackground
-  ? `bg-${visualBackground}`
+  ? ""
   : `bg-day-${node.day}`;
+
+const backgroundStyle = visualBackground
+  ? {
+      backgroundImage:
+        lang === "en"
+          ? `url("/backgrounds/${visualBackground}_en.webp"), url("/backgrounds/${visualBackground}.webp")`
+          : `url("/backgrounds/${visualBackground}.webp")`,
+    }
+  : undefined;
 
   const [displayText, setDisplayText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [autoMode, setAutoMode] = useState(false);
   const [skipMode, setSkipMode] = useState(false);
   const [ctrlPressed, setCtrlPressed] = useState(false);
-  const [mouthOpen, setMouthOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState<ItemKey[]>([]);
   const [centerTextFadeOut, setCenterTextFadeOut] = useState(false);
 
@@ -853,27 +873,6 @@ function getCurrentLineText() {
   return lang === "en" && node.textEn ? node.textEn : node.text;
 }
 
-  useEffect(() => {
-  if (node.type !== "line") {
-    setMouthOpen(false);
-    return;
-  }
-
-  if (!isTyping) {
-    setMouthOpen(false);
-    return;
-  }
-
-  const timer = window.setInterval(() => {
-    setMouthOpen((prev) => !prev);
-  }, 70);
-
-  return () => {
-    window.clearInterval(timer);
-    setMouthOpen(false);
-  };
-}, [node.type, node.id, isTyping]);
-
 useEffect(() => {
   if (node.type !== "effect") return;
 
@@ -889,7 +888,10 @@ useEffect(() => {
   if (!node.background) return;
 
   const currentImg = new Image();
-  currentImg.src = `/backgrounds/${node.background}.webp`;
+  currentImg.src =
+  lang === "en"
+    ? `/backgrounds/${node.background}_en.webp`
+    : `/backgrounds/${node.background}.webp`;
 
   if ("next" in node && node.next) {
     const nextNode = storyNodes[node.next];
@@ -899,16 +901,22 @@ useEffect(() => {
       "background" in nextNode &&
       nextNode.background
     ) {
-      const nextImg = new Image();
-      nextImg.src = `/backgrounds/${nextNode.background}.webp`;
+  const nextImg = new Image();
+  nextImg.src =
+  lang === "en"
+    ? `/backgrounds/${nextNode.background}_en.webp`
+    : `/backgrounds/${nextNode.background}.webp`;
     }
   }
-}, [node]);
+}, [node, lang]);
 
   return (
-    <div
+  <div
+  style={backgroundStyle}
   className={`novelScreen ${backgroundClass} ${
   "glitch" in node && node.glitch ? "screenGlitch" : ""
+} ${
+  "glitchLoop" in node && node.glitchLoop ? "screenGlitchLoop" : ""
 } ${
   "overlay" in node && node.overlay === "loopVortex"
     ? "loopVortexScreen loopStrongGlitch"
@@ -922,10 +930,18 @@ useEffect(() => {
     return;
   }
 
-  if (node.type === "bad" && node.next) {
+    if (node.type === "bad" && node.next) {
     e.preventDefault();
     e.stopPropagation();
     onNext();
+    return;
+  }
+
+  if (node.type === "end" && isClickToTitleEnd) {
+    e.preventDefault();
+    e.stopPropagation();
+    onBackTitle();
+    return;
   }
 }}
     >
@@ -939,19 +955,27 @@ useEffect(() => {
   >
     {crossfadeVisual.toBackground && (
       <div
-        className={`visualCrossfadeBackground visualCrossfadeTo bg-${crossfadeVisual.toBackground}`}
-        style={{
-          animationDuration: `${crossfadeVisual.durationMs}ms`,
-        }}
+        className="visualCrossfadeBackground visualCrossfadeTo"
+style={{
+  animationDuration: `${crossfadeVisual.durationMs}ms`,
+backgroundImage:
+  lang === "en"
+    ? `url("/backgrounds/${crossfadeVisual.toBackground}_en.webp"), url("/backgrounds/${crossfadeVisual.toBackground}.webp")`
+    : `url("/backgrounds/${crossfadeVisual.toBackground}.webp")`,
+}}
       />
     )}
 
     {crossfadeVisual.fromBackground && (
       <div
-        className={`visualCrossfadeBackground visualCrossfadeFrom bg-${crossfadeVisual.fromBackground}`}
-        style={{
-          animationDuration: `${crossfadeVisual.durationMs}ms`,
-        }}
+        className="visualCrossfadeBackground visualCrossfadeFrom"
+style={{
+  animationDuration: `${crossfadeVisual.durationMs}ms`,
+  backgroundImage:
+  lang === "en"
+    ? `url("/backgrounds/${crossfadeVisual.fromBackground}_en.webp"), url("/backgrounds/${crossfadeVisual.fromBackground}.webp")`
+    : `url("/backgrounds/${crossfadeVisual.fromBackground}.webp")`,
+}}
       />
     )}
 
@@ -1027,10 +1051,10 @@ useEffect(() => {
   ch.name.match(/^[^a-zA-Z0-9]+/)?.[0] ?? ch.name;
 
 const isSpeaking =
-  node.type === "line" &&
+  (node.type === "line" || node.type === "effect") &&
+  "speaker" in node &&
   node.speaker === baseName &&
-  isTyping &&
-  mouthOpen;
+  isCvMouthOpen;
 
     return (
         <img
@@ -1064,9 +1088,16 @@ const isSpeaking =
       {shouldShowMainTextBox && (
   <div
     className={`textBox ${isCinematicUiHidden ? "textBoxInvisible" : ""}`}
-    onClick={(e) => {
+        onClick={(e) => {
       if (node.type === "line") {
         handleTextClick(e);
+        return;
+      }
+
+      if (node.type === "end" && isClickToTitleEnd) {
+        e.preventDefault();
+        e.stopPropagation();
+        onBackTitle();
         return;
       }
 
@@ -1094,6 +1125,7 @@ const isSpeaking =
           </>
         )}
 
+{/*
 <div
   style={{
     position: "absolute",//デバック用//
@@ -1107,7 +1139,8 @@ const isSpeaking =
   }}
 >
   LOOP: {state.loopStock}
-</div>
+</div>//
+*/}
 
 <div className="textBoxControls">
 {canShowLoopButton && !isCinematicUiHidden && (

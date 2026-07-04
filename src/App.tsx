@@ -35,9 +35,9 @@ const DAY_START_NODE_IDS: Record<StartDay, string> = {
   3: "day2_end_placeholder",
 };
 
-const DEFAULT_BGM_VOLUME = 0.5;
-const DEFAULT_SE_VOLUME = 0.8;
-const DEFAULT_CV_VOLUME = 0.6;
+const DEFAULT_BGM_VOLUME = 0.3;
+const DEFAULT_SE_VOLUME = 0.7;
+const DEFAULT_CV_VOLUME = 0.8;
 
 function clampVolume(value: number | undefined, fallback: number) {
   if (typeof value !== "number" || Number.isNaN(value)) return fallback;
@@ -135,6 +135,12 @@ function getLoopEffectCharacter(value: unknown): LoopEffectCharacter | undefined
   const seRefs = useRef<HTMLAudioElement[]>([]);
   const loopingSeRefs = useRef<Record<string, HTMLAudioElement>>({});
   const cvRefs = useRef<HTMLAudioElement[]>([]);
+  const currentCvRef = useRef<HTMLAudioElement | null>(null);
+  const [isCvMouthOpen, setIsCvMouthOpen] = useState(false);
+
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const cvAnimationFrameRef = useRef<number | null>(null);
   const pausedByBackgroundRef = useRef(false);
   const appActiveRef = useRef(true);
 
@@ -383,6 +389,7 @@ useEffect(() => {
 
   function startNewGame(startDay: StartDay = 1) {
   stopBgm();
+  stopCV();
   stopOneShotSE();
   stopAllLoopingSE();
 
@@ -901,19 +908,150 @@ function stopAllLoopingSE(fade = false) {
   loopingSeRefs.current = {};
 }
 
+function stopCvMouthAnalysis() {
+  if (cvAnimationFrameRef.current !== null) {
+    cancelAnimationFrame(cvAnimationFrameRef.current);
+    cvAnimationFrameRef.current = null;
+  }
+
+  analyserRef.current = null;
+  setIsCvMouthOpen(false);
+}
+
+function startCvMouthAnalysis(audio: HTMLAudioElement) {
+  stopCvMouthAnalysis();
+
+  const AudioContextClass =
+    window.AudioContext ||
+    (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+
+  if (!audioContextRef.current) {
+    audioContextRef.current = new AudioContextClass();
+  }
+
+  const audioContext = audioContextRef.current;
+
+  if (audioContext.state === "suspended") {
+    audioContext.resume().catch(() => {});
+  }
+
+  const source = audioContext.createMediaElementSource(audio);
+  const analyser = audioContext.createAnalyser();
+
+  analyser.fftSize = 1024;
+  analyser.smoothingTimeConstant = 0.35;
+
+  source.connect(analyser);
+  analyser.connect(audioContext.destination);
+
+  analyserRef.current = analyser;
+
+  const data = new Uint8Array(analyser.fftSize);
+
+  const SILENCE_THRESHOLD = 0.030;
+  const OPEN_THRESHOLD = 0.05;
+
+  function tick() {
+    if (!analyserRef.current) {
+      setIsCvMouthOpen(false);
+      return;
+    }
+
+    analyserRef.current.getByteTimeDomainData(data);
+
+    let sum = 0;
+
+    for (let i = 0; i < data.length; i += 1) {
+      const normalized = (data[i] - 128) / 128;
+      sum += normalized * normalized;
+    }
+
+    const rms = Math.sqrt(sum / data.length);
+
+    setIsCvMouthOpen((prev) => {
+      if (rms < SILENCE_THRESHOLD) return false;
+      if (rms > OPEN_THRESHOLD) return true;
+      return prev;
+    });
+
+    cvAnimationFrameRef.current = requestAnimationFrame(tick);
+  }
+
+  tick();
+}
+
+function stopCV() {
+  stopCvMouthAnalysis();
+
+  if (currentCvRef.current) {
+    currentCvRef.current.pause();
+    currentCvRef.current.currentTime = 0;
+    currentCvRef.current = null;
+  }
+
+  cvRefs.current.forEach((audio) => {
+    audio.pause();
+    audio.currentTime = 0;
+  });
+
+  cvRefs.current = [];
+  setIsCvMouthOpen(false);
+}
+
 function playCV(key: string) {
   if (!audioUnlocked) return;
 
-  const cv = new Audio(`/cv/${key}.mp3`);
+  stopCV();
+
+  const src = `/cv/${key}.wav`;
+  const cv = new Audio(src);
+
   cv.volume = clampVolume(state.settings.cvVolume, DEFAULT_CV_VOLUME);
+  cv.preload = "auto";
 
-  cvRefs.current.push(cv);
+  currentCvRef.current = cv;
+  cvRefs.current = [cv];
 
-  cv.onended = () => {
-    cvRefs.current = cvRefs.current.filter((a) => a !== cv);
+  cv.onplay = () => {
+    startCvMouthAnalysis(cv);
   };
 
-  cv.play().catch(() => {});
+  cv.onended = () => {
+    stopCvMouthAnalysis();
+
+    if (currentCvRef.current === cv) {
+      currentCvRef.current = null;
+    }
+
+    cvRefs.current = cvRefs.current.filter((a) => a !== cv);
+    setIsCvMouthOpen(false);
+  };
+
+  cv.onerror = () => {
+    console.error("[CV] load error:", src, cv.error);
+
+    stopCvMouthAnalysis();
+
+    if (currentCvRef.current === cv) {
+      currentCvRef.current = null;
+    }
+
+    cvRefs.current = cvRefs.current.filter((a) => a !== cv);
+    setIsCvMouthOpen(false);
+  };
+
+  cv.play().catch((err) => {
+    console.error("[CV] play failed:", src, err);
+
+    stopCvMouthAnalysis();
+
+    if (currentCvRef.current === cv) {
+      currentCvRef.current = null;
+    }
+
+    cvRefs.current = cvRefs.current.filter((a) => a !== cv);
+    setIsCvMouthOpen(false);
+  });
 }
 
 function playClickSE(volumeOverride?: number) {
@@ -1053,6 +1191,7 @@ if (shouldRestoreLoopBgm) {
   }
 }
 
+  stopCV();
   stopOneShotSE();
 
   const loopSeKeys =
@@ -1364,8 +1503,9 @@ if (state.visitedNodeIds.includes("day1_loop_title_004")) {
   setShowBadConfirm(false);
 }
 
-  function handleBadBackTitle() {
+function handleBadBackTitle() {
   setShowBadConfirm(false);
+  stopCV();
   stopOneShotSE();
   stopAllLoopingSE(true);
   stopBgm(true);
@@ -1444,10 +1584,17 @@ if (screen === "disclaimer") {
   if (screen === "title") {
   const isEn = state.settings.lang === "en";
 
+  const titleBg = isEn
+  ? "/ui/title_bgE.webp"
+  : "/ui/title_bg.webp";
+
   return (
     <div className="appFrame">
       <div
   className="titleScreenWithBg"
+  style={{
+    backgroundImage: `url(${titleBg})`,
+  }}
   onMouseMove={unlockAudio}
   onPointerMove={unlockAudio}
   onPointerDown={unlockAudio}
@@ -1550,6 +1697,7 @@ if (screen === "disclaimer") {
       state={state}
       node={displayNode}
       lang={state.settings.lang}
+      isCvMouthOpen={isCvMouthOpen}
       onNext={handleNext}
       onChoice={handleChoice}
       onItemSelect={handleItemSelect}
@@ -1566,6 +1714,7 @@ if (screen === "disclaimer") {
       onOpenLog={() => setShowLog(true)}
       onOpenSettings={() => setShowSettings(true)}
       onBackTitle={() => {
+  stopCV();
   stopOneShotSE();
   stopAllLoopingSE(true);
   stopBgm(true);
@@ -1640,6 +1789,7 @@ if (screen === "disclaimer") {
   <MiniGameScreen
     miniGameId={node.miniGameId}
     forcedFail={node.forcedFail}
+    lang={state.settings.lang}
     onFinish={handleMiniGameFinish}
   />
 )}

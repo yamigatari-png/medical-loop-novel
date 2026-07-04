@@ -213,7 +213,25 @@ setDraggedInstrument(null);
   }
 
   function finishMiniGame(nextMistakeCount: number) {
-  const finalSuccess = nextMistakeCount === 0;
+
+  let allowedMistakes = 0;
+
+  switch (miniGameId) {
+    case "day1_surgery":
+      allowedMistakes = 0;   // 全問正解のみ成功
+      break;
+
+    case "day1_surgery2":
+    case "day2_emergency":
+      allowedMistakes = 1;   // 1問ミスまで成功
+      break;
+
+    default:
+      allowedMistakes = 0;
+      break;
+  }
+
+  const finalSuccess = nextMistakeCount <= allowedMistakes;
 
   const line = finalSuccess
     ? pickRandomLine(PERFECT_FINISH_LINES)
