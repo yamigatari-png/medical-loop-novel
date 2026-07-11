@@ -16,6 +16,8 @@ type RouteEnding = {
   text: string;
   textEn: string;
   image: string;
+  hint?: string;
+  hintEn?: string;
 };
 
 type RouteSection = {
@@ -49,6 +51,8 @@ const TRUE_ENDINGS: RouteEnding[] = [
     text: "それでも、前へ進む。",
     textEn: "Even so, he moves forward.",
     image: "/backgrounds/true_end.webp",
+    hint: "解放条件\n2日目終了までに詩織からループを渡されずにクリア",
+    hintEn: "Unlock Requirement\nClear the game without receiving the Loop from Shiori by the end of Day 2.",
   },
 ];
 
@@ -62,6 +66,8 @@ const GOOD_ENDINGS: RouteEnding[] = [
     text: "医療に、やり直しはない。",
     textEn: "There are no do-overs in medicine.",
     image: "/backgrounds/good_end.webp",
+    hint: "解放条件\n2日目終了までに詩織からループを渡された状態でクリア",
+    hintEn: "Unlock Requirement\nClear the game after receiving the Loop from Shiori by the end of Day 2.",
   },
 ];
 
@@ -173,6 +179,8 @@ const EXTRA_ENDINGS: RouteEnding[] = [
     text: "スーパードクター爆誕",
     textEn: "[A Super Doctor Is Born]",
     image: "/backgrounds/extra_end.webp",
+    hint: "解放条件\n初の手術を成功させる",
+    hintEn: "Unlock Requirement\nSucceed in the first surgery.",
   },
 ];
 
@@ -296,6 +304,10 @@ export function RouteMapScreen({
     0
   );
 
+    const hasSeenMainEnding =
+    seenEndings.includes("route_a_true") ||
+    seenEndings.includes("route_a_good");
+
   return (
     <div className="routeMapScreen">
       <button
@@ -375,55 +387,75 @@ export function RouteMapScreen({
             ) : (
               <div className="routeEndingList">
                 {section.endings.map((ending) => {
-                  const unlocked = isUnlocked(ending, seenEndings);
+  const unlocked = isUnlocked(ending, seenEndings);
+  const shouldShowHint =
+    hasSeenMainEnding && !unlocked && Boolean(ending.hint);
 
-                  return (
-                    <div
-                      key={ending.ids.join("_")}
-                      className={`routeEndingCard ${
-                        unlocked ? "unlocked" : "locked"
-                      }`}
-                    >
-                      <div className="routeEndingImageWrap">
-                        {unlocked ? (
-                          <img
-                            className="routeEndingImage"
-                            src={ending.image}
-                            alt={isEn ? ending.titleEn : ending.title}
-                          />
-                        ) : (
-                          <div className="routeEndingUnknown">？？？</div>
-                        )}
-                      </div>
+    const card = (
+    <div
+      key={ending.ids.join("_")}
+      className={`routeEndingCard ${
+        unlocked ? "unlocked" : "locked"
+      }`}
+    >
+      <div className="routeEndingImageWrap">
+        {unlocked ? (
+          <img
+            className="routeEndingImage"
+            src={ending.image}
+            alt={isEn ? ending.titleEn : ending.title}
+          />
+        ) : (
+          <div className="routeEndingUnknown">？？？</div>
+        )}
+      </div>
 
-                      <div className="routeEndingBody">
-                        <div className="routeEndingDate">
-  {unlocked ? (isEn ? ending.dateEn ?? ending.date : ending.date) : "？？？"}
-</div>
+      <div className="routeEndingBody">
+        <div className="routeEndingDate">
+          {unlocked ? (isEn ? ending.dateEn ?? ending.date : ending.date) : "？？？"}
+        </div>
 
-<h3>{unlocked ? (isEn ? ending.titleEn : ending.title) : "？？？"}</h3>
-                        <p>
-  {unlocked
-    ? isEn
-      ? ending.textEn
-      : ending.text
-    : isEn
-      ? "Not reached"
-      : "未到達"}
-</p>
+        <h3>{unlocked ? (isEn ? ending.titleEn : ending.title) : "？？？"}</h3>
 
-<small>
-  {unlocked
-    ? isEn
-      ? "Unlocked"
-      : "到達済み"
-    : isEn
-      ? "Locked"
-      : "未回収"}
-</small>
-                      </div>
-                    </div>
-                  );
+        <p>
+          {unlocked
+            ? isEn
+              ? ending.textEn
+              : ending.text
+            : isEn
+              ? "Not reached"
+              : "未到達"}
+        </p>
+
+        <small>
+          {unlocked
+            ? isEn
+              ? "Unlocked"
+              : "到達済み"
+            : isEn
+              ? "Locked"
+              : "未回収"}
+        </small>
+      </div>
+    </div>
+  );
+
+  if (!shouldShowHint) {
+    return card;
+  }
+
+  return (
+    <div
+      key={ending.ids.join("_")}
+      className="routeEndingCardWithHint"
+    >
+      {card}
+
+      <div className="routeEndingHint">
+        {isEn ? ending.hintEn : ending.hint}
+      </div>
+    </div>
+  );
                 })}
               </div>
             )}

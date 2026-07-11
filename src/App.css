@@ -3513,3 +3513,50 @@ body.armMemoOpen .textBox {
     padding: 28px 56px 18px 56px;
   }
 }
+
+.routeEndingCardWithHint {
+  grid-column: span 2;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.routeEndingCardWithHint .routeEndingCard {
+  width: 100%;
+  height: 100%;
+}
+
+.routeEndingCardWithHint .routeEndingHint {
+  align-self: center;
+
+  padding: 14px 18px;
+
+  border: 2px solid rgba(255, 255, 255, 0.72);
+  border-radius: 14px;
+
+  background: rgba(0, 0, 0, 0.66);
+  color: #fff;
+
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.6;
+  text-align: left;
+
+  white-space: pre-line;
+}
+
+@media (max-width: 900px) {
+  .routeEndingCardWithHint {
+    grid-column: span 2;
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+}
+
+@media (max-width: 620px) {
+  .routeEndingCardWithHint {
+    grid-column: 1;
+    grid-template-columns: 1fr;
+  }
+}
